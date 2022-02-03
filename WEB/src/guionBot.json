@@ -1,0 +1,19 @@
+{
+  "saludoInicial": "👋 Hola, Bienvenido al chatbot del Hospital Universitario de la Samaritana, espero se encuentre muy bien.\n\nℹ️ *Para solicitud de cita médica especializada por favor tenga a la mano:*\n• Esfero\n• Documento del paciente\n• Orden médica\n• Número de autorización de su EPS\n• Fecha de expedición y vigencia.\n\nNo olvide actualizar sus datos y solicitar la preparación de exámenes especiales.\n\n*¿Con quién tengo el gusto de hablar?* _(Por favor escriba su nombre)_ ⬇️",
+  "preguntaNombre": "*¿Con quién tengo el gusto de hablar?* _(Por favor escriba su nombre)_ ⬇️",
+  "msg1": "❓ ¿Que especialidad o consulta solicita programar?",
+  "msg2": "👤 Me confirma nombre del paciente",
+  "msg3": "👥 ¿Que parentesco tiene con el paciente?",
+  "msg4": "❓ ¿Ha tenido contacto con alguien covid positivo en los ultimos 14 días o ha tenido contacto estrecho?",
+  "msg5": "❓ ¿En los ultimos 14 días ha presentado algunos de los siguientes sintomas?:",
+  "msg6": "🏥 ¿Que EPS remite la autorización",
+  "msg7": "🗓️ ¿Que fecha de expedición tiene la autorización?\n_Escribala así dd-mm-aaaa (ej: 24-09-2021)_",
+  "msg8": "📄 Ahora indique la fecha de vencimiento o vigencia tiene la autorización\n_Escribala así dd-mm-aaaa (ej: 24-09-2021)_",
+  "msg9": "🔢 Señor usuario por favor escriba el código de servicio (CUPS de 6 dígitos)",
+  "msg10": "👤 Seleccione el tipo de documento del paciente",
+  "msg11": "👤 Indique el número de documento del paciente",
+  "msg12": "🔢 Indique el número de autorización que remite su EPS a nuestro hospital",
+  "sintomas": ["Fiebre", "Tos", "Moco", "Congestion_nasal", "Estornudos", "Dolor_de_cabeza", "Dificultad_al_respirar", "Dolor_de_garganta", "Diarrea", "Dolor_muscular", "Perdida_del_gusto", "Perdida_del_olfato"],
+  "msgFinCovid": "ℹ️ Señor usuario debe comunicarse nuevamente en 20 días, una vez se resuelva su sintomatología. adicional es necesario que se comunique a la EPS o a las siguientes líneas: Línea 123 Línea de atención “COVID-19” o  192.",
+  "msgEspere": "ℹ️ Usted ahora se encuentra en lista de espera, en un momento será atendido por uno de nuestros asesores"
+}

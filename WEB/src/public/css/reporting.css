@@ -1,0 +1,25 @@
+.canvaDonut{
+  align-items: center;
+  margin: auto;
+  justify-content: center;
+  height: 480px;
+  width: 380px; 
+}
+.canvaLinear{
+  align-items: left;
+  margin: auto;
+  justify-content: center;
+  height: 600px;
+  width: 600px; 
+}
+
+ .container_reporting .graficas {
+  position: relative;
+  min-height: 0px;
+  height: 500;
+  width: 500;
+  border-radius: 5px;
+  display: flex;
+  justify-content: center;
+  margin: auto;
+}

@@ -1,0 +1,34 @@
+<!--========== HEADER ==========-->
+<header class='header'>
+  <div class='header__container'>
+    <img src='/img/undraw_male_avatar_323b.svg' alt='' class='header__img' />
+
+    <a href='/transferencias' class='header__logo'>WhatsApp Mapple</a>
+
+    <div class='header__user'>{{user.Nombre}} - {{user.PER_CNIVEL}}</div>
+    {{#if (isAdministradorAgente user.PER_CNIVEL)}}
+      <div id='estados' class='estados'>
+
+        <select name='Estados' class='select' id='estados_user' autofocus>
+          <option selected='true' disabled='disabled'>SELECCIONE SU ESTADO</option>
+          <option>ACTIVO</option>
+          <option>BREAK</option>
+          <option>ALMUERZO</option>
+          <option>CERRAR TURNO</option>
+          {{! <option>ACTIVO_ENVIO_MENSAJES</option> }}
+          {{! <option>CONSULTA CHAT</option> }}
+        </select>
+
+      </div>
+      <div class='header__aux'>
+
+        <input type='text' disabled='disabled' class='' name='' id='inputState' />
+      </div>
+
+    {{/if}}
+
+    <div class='header__toggle'>
+      <i class='bx bx-menu' id='header-toggle'></i>
+    </div>
+  </div>
+</header>

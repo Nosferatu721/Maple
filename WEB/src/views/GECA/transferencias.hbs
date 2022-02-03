@@ -1,0 +1,223 @@
+<div class='container_transferencias'>
+  <h2>Atención de chats</h2>
+
+  <div class='grid_chats'>
+    <div class='chat'>
+      <div class='stateChat1'>
+        <button id='cerrarChat1' class='cerrarChat1 btn modal-trigger' href='#modal1'><i class='bx bxs-x-circle'></i></button>
+        <button id='createChat1' class='crearChat1 btn modal-trigger' href='#modal2Chat1'><i class='bx bx-message-add'></i></button>
+        <button id='consultarChat1' class='consultarChat1 btn modal-trigger' href='#modal3Chat1'><i class='bx bxs-file-find'></i></button>
+        <button id='limpiarConsultaChat1' class='cleanConsultarChat1' href='#'><i class='bx bxs-eraser'></i></button>
+        <button id='getPlantillas1' class='getPlantillas btn modal-trigger' href='#modalPlantillas'><i class='bx bx-spreadsheet'></i></button>
+      </div>
+      <img src='/img/fondQ.jpg' alt='Img_fondo' />
+      <div class='numero_chat1' id='numero_chat1'></div>
+      <div class='mensajes_chat' id='chat_1'></div>
+      <div class='input_chat'>
+        <div class='input-field col s6'>
+          <input id='inputMensaje1' type='text' placeholder='Escribe un mensaje aquí' class='validate' />
+        </div>
+        <button id='btnEnvioMensaje_1' class='btnEnvioMensaje_1'><i class='bx bxs-send'></i></button>
+
+      </div>
+
+      <div id='modal1' class='modal'>
+        <div class='modal-content'>
+          <h4>ADVERTENCIA</h4>
+          <p>Esta apunto de cerrar un chat, ¿Esta seguro de esta acción? </p>
+
+        </div>
+
+        <div class='modal-footer'>
+          <button href='#' class='btn modal-close' id='closeChat1'>Cerrar</button>
+
+        </div>
+      </div>
+
+      <div id='modal2Chat1' class='modal'>
+        <div class='modal-content'>
+          <h4>ADVERTENCIA</h4>
+          <p>INGRESE EL NUMERO CON EL CUAL SE QUIERE COMUNICAR </p>
+          <input id='number1' type='text' data-length='12' />
+          <label for='input_text'>Numero celular</label>
+
+        </div>
+
+        <div class='modal-footer'>
+          <button href='#' class='btn modal-close' id='crearChat1'>Crear</button>
+
+        </div>
+      </div>
+
+      <div id='modal3Chat1' class='modal'>
+        <div class='modal-content'>
+          <h4>ADVERTENCIA</h4>
+          <p>INGRESE EL NUMERO QUE DESEA CONSULTAR </p>
+          <input id='num1' type='text' data-length='12' />
+          <label for='input_text'>Numero celular</label>
+          <br /><button id='searchRegistryChat1' class='btn waves-effect waves-light' type='submit'>Buscar registro</button><br />
+          <br />
+          <select class='select' id='registryChat1' autofocus>
+
+          </select><br />
+
+          <label>Fechas</label>
+        </div>
+
+        <div class='modal-footer'>
+          <button href='#' class='btn modal-close' id='buscarChat1'>Buscar</button>
+
+        </div>
+      </div>
+
+    </div>
+
+    <div class='chat'>
+      <img src='/img/fondA.webp' alt='Img_fondo' />
+      <div class='numero_chat2' id='numero_chat2'></div>
+      <div class='mensajes_chat' id='chat_2'>
+
+      </div>
+      <div class='input_chat'>
+        <div class='input-field col s6'>
+          <input id='inputMensaje2' type='text' placeholder='Escribe un mensaje aquí' class='validate' />
+        </div>
+        <button id='btnEnvioMensaje_2' class='btnEnvioMensaje_2'><i class='bx bxs-send'></i></button>
+      </div>
+
+      <div class='stateChat2'>
+        <button id='cerrarChat2' class='cerrarChat2 btn modal-trigger' href='#modal2'><i class='bx bxs-x-circle'></i></button>
+        <button id='createChat2' class='crearChat2 btn modal-trigger' href='#modal2Chat2'><i class='bx bx-message-add'></i></button>
+        <button id='consultarChat2' class='consultarChat2 btn modal-trigger' href='#modal3Chat2'><i class='bx bxs-file-find'></i></button>
+        <button id='limpiarConsultaChat2' class='cleanConsultarChat2' href='#'><i class='bx bxs-eraser'></i></button>
+        <button id='getPlantillas2' class='getPlantillas btn modal-trigger' href='#modalPlantillas'><i class='bx bx-spreadsheet'></i></button>
+      </div>
+
+      <div id='modal2' class='modal'>
+        <div class='modal-content'>
+          <h4>ADVERTENCIA</h4>
+          <p>Esta apunto de cerrar un chat, ¿Esta seguro de esta acción?</p>
+
+        </div>
+
+        <div class='modal-footer'>
+          <button href='#' class='btn modal-close' id='closeChat2'>Cerrar</button>
+
+        </div>
+      </div>
+
+      <div id='modal2Chat2' class='modal'>
+        <div class='modal-content'>
+          <h4>ADVERTENCIA</h4>
+          <p>INGRESE EL NUMERO CON EL CUAL SE QUIERE COMUNICAR </p>
+          <input id='number2' type='text' data-length='12' />
+          <label for='input_text'>Numero celular</label>
+
+        </div>
+
+        <div class='modal-footer'>
+          <button href='#' class='btn modal-close' id='crearChat2'>Crear</button>
+
+        </div>
+      </div>
+
+      <div id='modal3Chat2' class='modal'>
+        <div class='modal-content'>
+          <h4>ADVERTENCIA</h4>
+          <p>INGRESE EL NUMERO QUE DESEA CONSULTAR </p>
+          <input id='num2' type='text' data-length='12' />
+          <label for='input_text'>Numero celular</label>
+          <br /><button id='searchRegistryChat2' class='btn waves-effect waves-light' type='submit'>Buscar registro</button><br />
+          <select class='select' id='registryChat2' autofocus>
+          </select>
+        </div>
+
+        <div class='modal-footer'>
+          <button href='#' class='btn modal-close' id='buscarChat2'>Buscar</button>
+
+        </div>
+      </div>
+
+    </div>
+
+    <div class='chat'>
+      <img src='/img/fondS.jpg' alt='Img_fondo' />
+      <div class='numero_chat3' id='numero_chat3'></div>
+      <div class='mensajes_chat' id='chat_3'>
+
+      </div>
+      <div class='input_chat'>
+        <div class='input-field col s6'>
+          <input id='inputMensaje3' type='text' placeholder='Escribe un mensaje aquí' class='validate' />
+        </div>
+        <button id='btnEnvioMensaje_3' class='btnEnvioMensaje_3'><i class='bx bxs-send'></i></button>
+      </div>
+
+      <div class='stateChat3'>
+        <button id='cerrarChat3' class='cerrarChat3 btn modal-trigger' href='#modal3'><i class='bx bxs-x-circle'></i></button>
+        <button id='createChat3' class='crearChat3 btn modal-trigger' href='#modal2Chat3'><i class='bx bx-message-add'></i></button>
+        <button id='consultarChat3' class='consultarChat3 btn modal-trigger' href='#modal3Chat3'><i class='bx bxs-file-find'></i></button>
+        <button id='limpiarConsultaChat3' class='cleanConsultarChat3' href='#'><i class='bx bxs-eraser'></i></button>
+        <button id='getPlantillas3' class='getPlantillas btn modal-trigger' href='#modalPlantillas'><i class='bx bx-spreadsheet'></i></button>
+      </div>
+
+      <div id='modal3' class='modal'>
+        <div class='modal-content'>
+          <h4>ADVERTENCIA</h4>
+          <p>Esta apunto de cerrar un chat, ¿Esta seguro de esta acción?</p>
+        </div>
+
+        <div class='modal-footer'>
+          <button href='#' class='btn modal-close' id='closeChat3'>Cerrar</button>
+
+        </div>
+      </div>
+
+      <div id='modal2Chat3' class='modal'>
+        <div class='modal-content'>
+          <h4>ADVERTENCIA</h4>
+          <p>INGRESE EL NUMERO CON EL CUAL SE QUIERE COMUNICAR </p>
+          <input id='number3' type='text' data-length='12' />
+          <label for='input_text'>Numero celular</label>
+
+        </div>
+
+        <div class='modal-footer'>
+          <button href='#' class='btn modal-close' id='crearChat3'>Crear</button>
+
+        </div>
+      </div>
+
+      <div id='modal3Chat3' class='modal'>
+        <div class='modal-content'>
+          <h4>ADVERTENCIA</h4>
+          <p>INGRESE EL NUMERO QUE DESEA CONSULTAR </p>
+          <input id='num3' type='text' data-length='12' />
+          <label for='input_text'>Numero celular</label>
+          <br /><button id='searchRegistryChat3' class='btn waves-effect waves-light' type='submit'>Buscar registro</button><br />
+          <select class='select' id='registryChat3' autofocus>
+
+          </select>
+        </div>
+
+        <div class='modal-footer'>
+          <button href='#' class='btn modal-close' id='buscarChat3'>Buscar</button>
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+{{! Plantillas }}
+<div id='modalPlantillas' class='modal'>
+  <div class='modal-content'>
+    <h4>Plantillas</h4>
+    <p>Seleccione una plantilla para cargar</p>
+    <div class='plantillas'>
+    </div>
+  </div>
+</div>
+
+<script src='/js/transferencias.js'></script>
