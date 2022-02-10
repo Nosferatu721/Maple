@@ -108,6 +108,41 @@ const mensajeSweetalert2 = () => {
 };
 document.addEventListener('DOMContentLoaded', (e) => {
   mensajeSweetalert2();
+  // * Datatables //
+  let configDatatable = {
+    // options
+    responsive: 'true',
+    dom: '<"centerTopDataTable"lf>rt<"centerTopDataTable"ip>B',
+    iDisplayLength: 5,
+    aLengthMenu: [
+      [5, 10, 25, 50, -1],
+      [5, 10, 25, 50, 'All'],
+    ],
+    buttons: [
+      {
+        extend: 'excelHtml5',
+        text: 'EXCEL',
+        titleAttr: 'Exportar a Excel',
+        className: 'green darken-4',
+      },
+    ],
+    language: {
+      lengthMenu: 'Mostrar _MENU_ registros',
+      zeroRecords: 'No se encontraron resultados',
+      info: 'Registros en total - _TOTAL_',
+      infoEmpty: '0 registros',
+      infoFiltered: '(filtrado de un total de MAX registros)',
+      sSearch: 'Buscar:',
+      oPaginate: {
+        sFirst: 'Primero',
+        sLast: 'Último',
+        sNext: 'Siguiente',
+        sPrevious: 'Anterior',
+      },
+      sProcessing: 'Procesando...',
+    },
+  };
+  let tableDatatable = new DataTable('#tabla', configDatatable);
 });
 
 // * Funciones Cargar y Ocultar loader

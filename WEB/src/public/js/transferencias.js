@@ -37,6 +37,8 @@ document.addEventListener('DOMContentLoaded', () => {
   var fechassschat3;
   var valuechat3;
 
+  let infoChatBotInit = null;
+
   //const chat_313481 = document.getElementById('chat_313481'),
   const chat = document.getElementById('chat');
 
@@ -137,14 +139,51 @@ document.addEventListener('DOMContentLoaded', () => {
         if (localStorage.getItem('number1') === null) {
           // console.log('@@@@@@@@@ENTRO ASIGNO AL CHAT1');
           postData('/GECA/asignacionSelect').then(async (res) => {
-            res.result.forEach((mensaje) => {
+            console.log(res);
+            res.result.forEach(async (mensaje) => {
+              infoChatBotInit =
+                `
+                Nombre: ${mensaje.GES_CDETALLE1} ` +
+                '<br>' +
+                `
+                Parentesco: ${mensaje.GES_CDETALLE2} ` +
+                '<br>' +
+                `
+                Tipo Documento: ${mensaje.GES_CDETALLE3} ` +
+                '<br>' +
+                `
+                Nombre Confirmado: ${mensaje.GES_CDETALLE4} ` +
+                '<br>' +
+                `
+                Numeros de Contacto: ${mensaje.GES_CDETALLE5} ` +
+                '<br>' +
+                `
+                ¿Contacto con alguien con Covid? (Ultimos 14 dias): ${mensaje.GES_CDETALLE6} ` +
+                '<br>' +
+                `
+                ¿Ha tenido alguno de los siguientes sintomas? (Ultimos 14 dias): ${mensaje.GES_CDETALLE7} ` +
+                '<br>' +
+                `
+                Ciudad: ${mensaje.GES_CDETALLE8} ` +
+                '<br>' +
+                `
+                EPS: ${mensaje.GES_CDETALLE9} ` +
+                '<br>' +
+                `
+                Sede: ${mensaje.GES_CDETALLE10} ` +
+                '<br>' +
+                `
+                Solicitud Cliente: ${mensaje.GES_CDETALLE11} ` +
+                '<br>' +
+                `
+              `;
               let idArboll = mensaje.PKGES_CODIGO;
               numberRecepcion = mensaje.GES_NUMERO_COMUNICA;
               //let ultMSJ = mensaje.GES_CDETALLE;
               let mensajeBienvenida = 'Tiene un nuevo cliente en este chat';
               console.log('************************ESTE ES EL MENSAJE', mensaje);
               idArbol = idArboll;
-              let msjConcatenadoo = mensajeBienvenida + '<br>';
+              let msjConcatenadoo = mensajeBienvenida + '<br>' + infoChatBotInit;
 
               asignacion(idPer, idArbol);
               //    console.log('##################este es el', numberRecepcion);
@@ -160,12 +199,48 @@ document.addEventListener('DOMContentLoaded', () => {
         } else if (localStorage.getItem('number2') === null) {
           postData('/GECA/asignacionSelect').then(async (res) => {
             res.result.forEach((mensaje) => {
+              infoChatBotInit =
+                `
+                Nombre: ${mensaje.GES_CDETALLE1} ` +
+                '<br>' +
+                `
+                Parentesco: ${mensaje.GES_CDETALLE2} ` +
+                '<br>' +
+                `
+                Tipo Documento: ${mensaje.GES_CDETALLE3} ` +
+                '<br>' +
+                `
+                Nombre Confirmado: ${mensaje.GES_CDETALLE4} ` +
+                '<br>' +
+                `
+                Numeros de Contacto: ${mensaje.GES_CDETALLE5} ` +
+                '<br>' +
+                `
+                ¿Contacto con alguien con Covid? (Ultimos 14 dias): ${mensaje.GES_CDETALLE6} ` +
+                '<br>' +
+                `
+                ¿Ha tenido alguno de los siguientes sintomas? (Ultimos 14 dias): ${mensaje.GES_CDETALLE7} ` +
+                '<br>' +
+                `
+                Ciudad: ${mensaje.GES_CDETALLE8} ` +
+                '<br>' +
+                `
+                EPS: ${mensaje.GES_CDETALLE9} ` +
+                '<br>' +
+                `
+                Sede: ${mensaje.GES_CDETALLE10} ` +
+                '<br>' +
+                `
+                Solicitud Cliente: ${mensaje.GES_CDETALLE11} ` +
+                '<br>' +
+                `
+              `;
               let idArboll = mensaje.PKGES_CODIGO;
               numberRecepcion = mensaje.GES_NUMERO_COMUNICA;
               //let ultMSJ = mensaje.GES_CDETALLE;
               let mensajeBienvenida = 'Tiene un nuevo cliente en este chat';
               idArbol2 = idArboll;
-              let msjConcatenadoo = mensajeBienvenida + '<br>';
+              let msjConcatenadoo = mensajeBienvenida + '<br>' + infoChatBotInit;
 
               asignacion(idPer, idArbol2);
               //    console.log('##################este es el numero', numberRecepcion);
@@ -178,13 +253,49 @@ document.addEventListener('DOMContentLoaded', () => {
         } else if (localStorage.getItem('number3') === null) {
           postData('/GECA/asignacionSelect').then(async (res) => {
             res.result.forEach((mensaje) => {
+              infoChatBotInit =
+                `
+                Nombre: ${mensaje.GES_CDETALLE1} ` +
+                '<br>' +
+                `
+                Parentesco: ${mensaje.GES_CDETALLE2} ` +
+                '<br>' +
+                `
+                Tipo Documento: ${mensaje.GES_CDETALLE3} ` +
+                '<br>' +
+                `
+                Nombre Confirmado: ${mensaje.GES_CDETALLE4} ` +
+                '<br>' +
+                `
+                Numeros de Contacto: ${mensaje.GES_CDETALLE5} ` +
+                '<br>' +
+                `
+                ¿Contacto con alguien con Covid? (Ultimos 14 dias): ${mensaje.GES_CDETALLE6} ` +
+                '<br>' +
+                `
+                ¿Ha tenido alguno de los siguientes sintomas? (Ultimos 14 dias): ${mensaje.GES_CDETALLE7} ` +
+                '<br>' +
+                `
+                Ciudad: ${mensaje.GES_CDETALLE8} ` +
+                '<br>' +
+                `
+                EPS: ${mensaje.GES_CDETALLE9} ` +
+                '<br>' +
+                `
+                Sede: ${mensaje.GES_CDETALLE10} ` +
+                '<br>' +
+                `
+                Solicitud Cliente: ${mensaje.GES_CDETALLE11} ` +
+                '<br>' +
+                `
+              `;
               let mensajeBienvenida = 'Tiene un nuevo cliente en este chat';
               let idArboll = mensaje.PKGES_CODIGO;
               numberRecepcion = mensaje.GES_NUMERO_COMUNICA;
               //let ultMSJ = mensaje.GES_CDETALLE;
 
               idArbol3 = idArboll;
-              let msjConcatenadoo = mensajeBienvenida + '<br>';
+              let msjConcatenadoo = mensajeBienvenida + '<br>' + infoChatBotInit;
 
               asignacion(idPer, idArbol3);
               //   console.log('##################este es el numero', numberRecepcion);
@@ -638,6 +749,26 @@ document.addEventListener('DOMContentLoaded', () => {
       document.getElementById('limpiarConsultaChat1').style.display = 'none';
       document.getElementById('limpiarConsultaChat2').style.display = 'none';
       document.getElementById('limpiarConsultaChat3').style.display = 'none';
+    } else if (localStorage.getItem('estadoUser') == 'ALMUERZO' && localStorage.getItem('cantidad') == 0) {
+      //console.log("ESTOY EN VALIDACION DE CANTIDAD 0 Y ALMUERZO");
+      // console.log("ESTOY ENTRANDO A VALIDAR EL ESTADO, ESTA EN ALMUERZO Y CON MAS DE UN CASO O NINGUN CASOS");
+      //document.getElementById('close_session').style.visibility='hidden';
+      document.getElementById('closeChat1').style.display = 'none';
+      document.getElementById('closeChat2').style.display = 'none';
+      document.getElementById('closeChat3').style.display = 'none';
+      document.getElementById('close_session').style.display = 'none';
+
+      document.getElementById('createChat1').style.display = 'none';
+      document.getElementById('createChat2').style.display = 'none';
+      document.getElementById('createChat3').style.display = 'none';
+
+      document.getElementById('consultarChat1').style.display = 'none';
+      document.getElementById('consultarChat2').style.display = 'none';
+      document.getElementById('consultarChat3').style.display = 'none';
+
+      document.getElementById('limpiarConsultaChat1').style.display = 'none';
+      document.getElementById('limpiarConsultaChat2').style.display = 'none';
+      document.getElementById('limpiarConsultaChat3').style.display = 'none';
     } else if (localStorage.getItem('estadoUser') == 'TURNO CERRADO' && localStorage.getItem('cantidad') == 0) {
       document.getElementById('closeChat1').style.display = 'none';
       document.getElementById('closeChat2').style.display = 'none';
@@ -710,28 +841,31 @@ document.addEventListener('DOMContentLoaded', () => {
   }, 1000);
 
   //METODOS USADOS PARA CERRAR EL CHAT.
-  async function cerrarCaso(idArbol) {
+  async function cerrarCaso(idArbol, selectTipChat1, selectEspChat1) {
     console.log('************ME LLEGA************* ', idArbol);
 
     //console.log('************ME LLEGA************* ', sessionStorage.getItem('tipificacion1'));
     //console.log('************ME LLEGA************* ', sessionStorage.getItem('subtipificacion1'));
 
-    let x = await postData('/GECA/casoCerrado', { PKGES_CODIGO: idArbol });
+    let x = await postData('/GECA/casoCerrado', { PKGES_CODIGO: idArbol, selectTipChat1, selectEspChat1 });
     return x;
   }
 
   closeChat1.addEventListener('click', async () => {
     let chat_1 = document.getElementById(number1);
     let arbol1 = localStorage.getItem('arbol1');
+    let selectTipChat1 = document.getElementById('selectTipChat1');
+    let selectEspChat1 = document.getElementById('selectEspChat1');
+    console.log(selectTipChat1.value, selectEspChat1.value);
     //M.toast({html: 'I am a toast!'})
     console.log('************ME LLEGA************* ', arbol1);
-    const mensajeFin = 'gracias por contactarnos nos estaremos viendo en proximas ocasiones';
+    const mensajeFin = 'Gracias por comunicarse con Maple Respiratory Colombia, lo esperamos en una próxima oportunidad, que tenga un feliz dia.';
 
     postData('/GECA/enviarMensaje', { MEN_NUMERO_DESTINO: number1, MEN_TEXTO: mensajeFin, FK_GES_CODIGO: arbol1 }).then((res) => {
       console.log(res);
     });
 
-    await cerrarCaso(arbol1);
+    await cerrarCaso(arbol1, selectTipChat1.value, selectEspChat1.value);
     //console.log('::::::::', respuestaXD);
 
     localStorage.removeItem('number1');
@@ -747,6 +881,8 @@ document.addEventListener('DOMContentLoaded', () => {
   closeChat2.addEventListener('click', async () => {
     let chat_2 = document.getElementById(number2);
     let arbol2 = localStorage.getItem('arbol2');
+    let selectTipChat2 = document.getElementById('selectTipChat2');
+    let selectEspChat2 = document.getElementById('selectEspChat2');
 
     const mensajeFin = 'gracias por contactarnos nos estaremos viendo en proximas ocasiones';
 
@@ -754,7 +890,7 @@ document.addEventListener('DOMContentLoaded', () => {
       console.log(res);
     });
 
-    await cerrarCaso(arbol2);
+    await cerrarCaso(arbol2, selectTipChat2.value, selectEspChat2.value);
     localStorage.removeItem('number2');
     localStorage.removeItem('arbol2');
     localStorage.removeItem('Msj2');
@@ -766,13 +902,15 @@ document.addEventListener('DOMContentLoaded', () => {
   closeChat3.addEventListener('click', async () => {
     let chat_3 = document.getElementById(number3);
     let arbol3 = localStorage.getItem('arbol3');
+    let selectTipChat3 = document.getElementById('selectTipChat3');
+    let selectEspChat3 = document.getElementById('selectEspChat3');
     const mensajeFin = 'gracias por contactarnos nos estaremos viendo en proximas ocasiones';
 
     postData('/GECA/enviarMensaje', { MEN_NUMERO_DESTINO: number3, MEN_TEXTO: mensajeFin, FK_GES_CODIGO: arbol3 }).then((res) => {
       console.log(res);
     });
 
-    await cerrarCaso(arbol3);
+    await cerrarCaso(arbol3, selectTipChat3.value, selectEspChat3.value);
     localStorage.removeItem('number3');
     localStorage.removeItem('arbol3');
     localStorage.removeItem('Msj3');
@@ -1347,15 +1485,15 @@ document.addEventListener('DOMContentLoaded', () => {
       `;
     });
 
-    divPlantillas.innerHTML = htmlPlantillas
+    divPlantillas.innerHTML = htmlPlantillas;
 
-    document.querySelectorAll('.btnCopyPlantilla').forEach(elem => {
+    document.querySelectorAll('.btnCopyPlantilla').forEach((elem) => {
       elem.addEventListener('click', () => {
         inputMensaje1.value = elem.parentElement.textContent.trim();
         let instance = M.Modal.getInstance(elemsModal[9]);
         instance.close();
-      })
-    })
+      });
+    });
   });
   getPlantillas2.addEventListener('click', async () => {
     const divPlantillas = document.querySelector('#modalPlantillas .plantillas');
@@ -1371,15 +1509,15 @@ document.addEventListener('DOMContentLoaded', () => {
       `;
     });
 
-    divPlantillas.innerHTML = htmlPlantillas
+    divPlantillas.innerHTML = htmlPlantillas;
 
-    document.querySelectorAll('.btnCopyPlantilla').forEach(elem => {
+    document.querySelectorAll('.btnCopyPlantilla').forEach((elem) => {
       elem.addEventListener('click', () => {
         inputMensaje2.value = elem.parentElement.textContent.trim();
         let instance = M.Modal.getInstance(elemsModal[9]);
         instance.close();
-      })
-    })
+      });
+    });
   });
   getPlantillas3.addEventListener('click', async () => {
     const divPlantillas = document.querySelector('#modalPlantillas .plantillas');
@@ -1395,14 +1533,14 @@ document.addEventListener('DOMContentLoaded', () => {
       `;
     });
 
-    divPlantillas.innerHTML = htmlPlantillas
+    divPlantillas.innerHTML = htmlPlantillas;
 
-    document.querySelectorAll('.btnCopyPlantilla').forEach(elem => {
+    document.querySelectorAll('.btnCopyPlantilla').forEach((elem) => {
       elem.addEventListener('click', () => {
         inputMensaje3.value = elem.parentElement.textContent.trim();
         let instance = M.Modal.getInstance(elemsModal[9]);
         instance.close();
-      })
-    })
+      });
+    });
   });
 });

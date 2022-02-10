@@ -98,10 +98,10 @@ class Gestion{
     return id_gestion;
   }
 //este probablemente no lo necesite ya que cambia a MSG_FIN despues de responder la lista
-  async update_gestion(id, msg, respuesta) {
+  async update_gestion(id, msg, respuesta, column) {
     let comprobar = false;
     let estado = "Activo";
-    const sql = `UPDATE ${DB}.tbl_gestion SET GES_CULT_MSGBOT = '${msg}', GES_CDETALLE = '${respuesta}' WHERE PKGES_CODIGO = '${id}' AND GES_CESTADO = '${estado}';`;
+    const sql = `UPDATE ${DB}.tbl_gestion SET GES_CULT_MSGBOT = '${msg}', GES_CDETALLE = '${respuesta}', ${column} = '${respuesta}' WHERE PKGES_CODIGO = '${id}' AND GES_CESTADO = '${estado}';`;
     await connDB
       .promise()
       .query(sql)
@@ -115,7 +115,7 @@ class Gestion{
   //data pero de los arboles activos
 async get_data_list_from_number (numberPhone){
   let estado = "Activo";
-  const sql = `SELECT FKGES_NPER_CODIGO as idAsesor,GES_ESTADO_CASO as estadoCaso,GES_CULT_MSGBOT FROM ${DB}.tbl_gestion WHERE GES_NUMERO_COMUNICA ='${numberPhone}' AND GES_CESTADO = '${estado}';`;
+  const sql = `SELECT * FROM ${DB}.tbl_gestion WHERE GES_NUMERO_COMUNICA ='${numberPhone}' AND GES_CESTADO = '${estado}';`;
   let datatable=[];
   await connDB
     .promise()
@@ -123,7 +123,7 @@ async get_data_list_from_number (numberPhone){
     .then(([results, fields]) => {
       if (results.length > 0) {
          
-         datatable.push(results[0].idAsesor,results[0].estadoCaso,results[0].GES_CULT_MSGBOT)
+         datatable.push(results[0])
       } else {
         id_tree = 'NO EXISTE ARBOL CON ESE NUMERO ACTIVO';
       }
@@ -143,7 +143,7 @@ async get_data_list_from_number (numberPhone){
     let estado = "Activo";
     let id_tree;
     const sql = `SELECT PKGES_CODIGO FROM ${DB}.tbl_gestion WHERE GES_NUMERO_COMUNICA ='${numberPhone}' AND GES_CESTADO = '${estado}';`;
-    console.log(sql);
+    //console.log(sql);
     await connDB
       .promise()
       .query(sql)

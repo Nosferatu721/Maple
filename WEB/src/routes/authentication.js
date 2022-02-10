@@ -20,11 +20,12 @@ router.post("/login", (req, res, next) => {
 router.get("/redirect", (req, res, next) => {
   
   console.log("ESTE ES EL IDDDDDDDDDDDDDDDDDDDDDD",req.user.PER_CNIVEL);
-      if(req.user.PER_CNIVEL=="SUPERVISOR"){
-        res.redirect("GECARep/reportes")
-      }
-      else if(req.user.PER_CNIVEL=="AGENTE"){
-        res.redirect("GECA/transferencias")
+      if (req.user.PER_CNIVEL == 'SUPERVISOR') {
+        res.redirect('GECARep/reportes');
+      } else if (req.user.PER_CNIVEL == 'AGENTE') {
+        res.redirect('GECA/transferencias');
+      } else if (req.user.PER_CNIVEL == 'BACKOFFICE') {
+        res.redirect('GECA/backoffice');
       }
 });
 

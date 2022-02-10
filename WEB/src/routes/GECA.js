@@ -11,19 +11,32 @@ router.get('/transferencias', (req, res) => {
 });
 
 /*
-router.get('/reportes', (req, res) => {
+  router.get('/reportes', (req, res) => {
   res.render('samaritana/reportes', { title: 'Reportes' });
 });
 */
 
 // * Rutas
-router.get('/papitas', (req, res) => {
-  const sql = 'SELECT * FROM dbp_usuarios.tbl_rcredencial';
-  db.promise()
-    .query(sql)
-    .then(([result]) => {
-      res.json({ primero: result[0], result });
-    });
+router.get('/backoffice', async (req, res) => {
+  const sqlSelect = `SELECT * FROM ${keys.database.database}.tbl_gestion INNER JOIN ${keys.database.database}.tbl_rpermiso ON FKGES_NPER_CODIGO = PKPER_NCODIGO WHERE GES_ESTADO_CASO = 'CERRADO' ORDER BY PKGES_CODIGO DESC`;
+  let [rows] = await db.promise().query(sqlSelect);
+  res.render('GECA/backoffice', { title: 'BackOffice', chatsCerrados: rows });
+});
+
+router.get('/detalleChat/:id', async (req, res) => {
+  const idChatGes = req.params.id;
+  const sqlSelectGes = `SELECT * FROM ${keys.database.database}.tbl_gestion INNER JOIN ${keys.database.database}.tbl_rpermiso ON FKGES_NPER_CODIGO = PKPER_NCODIGO WHERE GES_ESTADO_CASO = 'CERRADO' AND PKGES_CODIGO = ?`;
+  let [rowsSelectGes] = await db.promise().query(sqlSelectGes, [idChatGes]),
+    numeroChat = await rowsSelectGes[0].GES_NUMERO_COMUNICA,
+    idArbol = await rowsSelectGes[0].PKGES_CODIGO;
+
+  const sqlSelectMen = `SELECT * FROM ${keys.database.database}.tbl_mensajes_chat WHERE MEN_NUMERO_ORIGEN = ? OR MEN_NUMERO_DESTINO = ? AND FK_GES_CODIGO = ?`;
+  let [rowsSelectMen] = await db.promise().query(sqlSelectMen, [numeroChat, numeroChat, idArbol]);
+
+  let l = rowsSelectMen.length;
+
+  // res.json({rowsSelectGes: rowsSelectGes[0], rowsSelectMen })
+  res.render('GECA/detalleChat', { title: 'Detalles', rowsSelectGes: rowsSelectGes[0], rowsSelectMen, fFin: rowsSelectMen[l - 1].MEN_CFECHA_REGISTRO });
 });
 
 //HAGO EL ENVIO A LA BASE DE DATOS
@@ -151,12 +164,12 @@ router.post('/asignacionUpdate', (req, res) => {
 });
 
 router.post('/casoCerrado', (req, res) => {
-  const { PKGES_CODIGO } = req.body;
+  const { PKGES_CODIGO, selectTipChat1, selectEspChat1 } = req.body;
   console.log('*******************--------recibo de id y de estado-----------------****************', PKGES_CODIGO);
 
-  const sqlUpdate = 'UPDATE ' + keys.database.database + '.tbl_gestion SET GES_ESTADO_CASO="CERRADO",GES_CESTADO="Inactivo"  WHERE PKGES_CODIGO = ?;';
+  const sqlUpdate = `UPDATE ${keys.database.database}.tbl_gestion SET GES_ESTADO_CASO = ?, GES_CDETALLE17 = ?, GES_CDETALLE18 = ?, GES_CESTADO = ? WHERE PKGES_CODIGO = ?`;
   db.promise()
-    .query(sqlUpdate, [PKGES_CODIGO])
+    .query(sqlUpdate, ['CERRADO', selectTipChat1, selectEspChat1, 'Inactivo', PKGES_CODIGO])
     .then(([result, fields]) => {
       // console.log("responde",result[0].contador);
       res.json({ xd: 'Enviado' });

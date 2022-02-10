@@ -1,0 +1,27 @@
+<div class='cont_backoffice' style="padding: 1rem 2rem">
+  <h1 class='center'>Vista de Chats Finalizados</h1>
+  <table id="tabla" class="striped highlight centered">
+    <thead class="styleHeadTable">
+      <tr>
+        <th>Asesor</th>
+        <th>Numero de Chat</th>
+        <th>Tipificacion</th>
+        <th>Especialidad</th>
+        <th>Fecha</th>
+        <th>Detalles</th>
+      </tr>
+    </thead>
+    <tbody>
+      {{#each chatsCerrados}}
+        <tr>
+          <td>{{this.PER_CUSUARIO}}</td>
+          <td>{{this.GES_NUMERO_COMUNICA}}</td>
+          <td>{{this.GES_CDETALLE17}}</td>
+          <td>{{this.GES_CDETALLE18}}</td>
+          <td>{{this.GES_CFECHA_MODIFICACION}}</td>
+          <td><a href="/GECA/detalleChat/{{this.PKGES_CODIGO}}" class="waves-effect waves-light btn amber lighten-1 black-text text-darken-1"><i class='bx bx-caret-right-circle right'></i>Ver</a></td>
+        </tr>
+      {{/each}}
+    </tbody>
+  </table>
+</div>

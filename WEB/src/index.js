@@ -64,7 +64,7 @@ app.use((req, res, next) => {
   app.locals.messageWarning = req.flash('messageWarning');
   app.locals.messageError = req.flash('messageError');
   app.locals.user = req.user;
-  console.log(req.user)
+  // console.log(req.user)
   next();
 });
 
