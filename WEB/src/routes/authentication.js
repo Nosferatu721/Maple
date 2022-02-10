@@ -5,7 +5,7 @@ const { isNotLoggedIn } = require("../lib/auth");
 
 
 router.get("/login", isNotLoggedIn, (req, res) => {
-  res.render("auth/login", { title: "Login GECA", noMaterialize: true });
+  res.render("auth/login", { title: "Login Maple", noMaterialize: true });
 });
 
 router.post("/login", (req, res, next) => {
