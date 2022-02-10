@@ -7,3 +7,7 @@ Handlebars.registerHelper("isAdministradorSupervisor", (value) => {
 Handlebars.registerHelper("isAdministradorAgente", (value) => {
   return value === "Administrador" || value === "AGENTE";
 });
+
+Handlebars.registerHelper('isEnviado', (value) => {
+  return value === 'ENVIADO';
+});

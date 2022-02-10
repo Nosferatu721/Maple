@@ -1,6 +1,29 @@
 <div class='container_reporting'>
   <div><h1><center>Reportes</center></h1></div>
-  
+
+  {{! Chats Live }}
+  <div class='' style='padding: 1rem 2rem'>
+    <h5 class="center">Agentes gestionando</h5>
+    <table id='' class='striped highlight centered'>
+      <thead class='styleHeadTable'>
+        <tr>
+          <th>Agente</th>
+          <th>Cedula</th>
+          <th>Estado</th>
+        </tr>
+      </thead>
+      <tbody>
+        {{#each chatsLive}}
+          <tr>
+            <td>{{this.GES_NUMERO_COMUNICA}}</td>
+            <td>{{this.PER_CUSUARIO}}</td>
+            <td>Hablando</td>
+          </tr>
+        {{/each}}
+      </tbody>
+    </table>
+  </div>
+
   <div id='modalDetGestion' class='modalDetGestion modal' class='modal hide' data-backdrop='static' data-keyboard='false'>
     <div class='modal-content'>
       <h4></h4>
@@ -11,12 +34,7 @@
     </div>
   </div>
 
-
-
-
-
-
-<div  id='main2'>
+  <div id='main2'>
     <div class='row'>
       <h4>Chats en espera...</h4>
       <div class='col s12'>
@@ -28,7 +46,7 @@
                 <th>Cliente</th>
                 <th>Fecha de registro inicial</th>
                 <th>Estado</th>
-                
+
               </tr>
             </thead>
             <tbody class='table2' id='table2'>
@@ -39,15 +57,33 @@
     </div>
   </div>
 
+  <div class='canvaDonut'><canvas id='mychar' class='canvaDonut'></canvas></div>
 
+  {{! Agentes }}
+  <div class='' style='padding: 1rem 2rem'>
+    <h5 class="center">Estado de agentes</h5>
+    <table id='' class='striped highlight centered'>
+      <thead class='styleHeadTable'>
+        <tr>
+          <th>Agente</th>
+          <th>Cedula</th>
+          <th>Estado</th>
+          <th>Chats Gestionados Hoy</th>
+        </tr>
+      </thead>
+      <tbody>
+        {{#each agentes}}
+          <tr>
+            <td>{{this.PER_CUSUARIO}}</td>
+            <td>{{this.FKPER_NCRE_NCODIGO}}</td>
+            <td>{{this.PER_AUXILIAR}}</td>
+            <td>{{this.chatsGesCount}}</td>
+          </tr>
+        {{/each}}
+      </tbody>
+    </table>
+  </div>
 
-
-
-      <div class='canvaDonut'><canvas id='mychar' class='canvaDonut'></canvas></div>
-      
-
-
-  
 </div>
 
 <script src='/js/reportes.js'></script>

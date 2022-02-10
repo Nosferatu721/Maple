@@ -60,18 +60,18 @@
               <span class='nav__name'>Atención de chats</span>
             </a>
           {{/if}}
-          {{#if (isAdministradorSupervisor user.rpermiso.PER_CNIVEL)}}
+          {{#if (isAdministradorSupervisor user.PER_CNIVEL)}}
           <div class='nav__dropdown'>
-            <a href='/GECA/reportes' class='nav__link'>
+            <a href='/GECARep/reportes' class='nav__link'>
               <i class='bx bx-bell nav__icon'></i>
               <span class='nav__name'>Informes</span>
 
             </a>
 
           </div>
-          <a href='/GECA/reportesExcel' class='nav__link'>
+          <a href='/GECA/backoffice' class='nav__link'>
             <i class='bx bx-bookmark nav__icon'></i>
-            <span class='nav__name'>Reportes</span>
+            <span class='nav__name'>Auditoria Calidad</span>
             
           </a>
           {{/if}}

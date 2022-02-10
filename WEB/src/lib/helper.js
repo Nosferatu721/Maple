@@ -14,7 +14,7 @@ helpers.obtain = (obj,name) =>{
       if(key == name){
         let groups = value.split(",")
         console.log(groups);
-        if (groups.includes("OU=Avantel") || groups.includes("OU=Wom") || groups.includes("OU=RPA")){//laika))
+        if (true){//laika))
           console.log(groups)
           split2 = helpers.filterItems(groups, 'CN')
           let nombre = (split2[0].split("="))[1]

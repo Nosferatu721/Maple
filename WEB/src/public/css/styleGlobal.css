@@ -4,3 +4,15 @@
 .hidden {
   visibility: hidden;
 }
+.centerTopDataTable {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem;
+}
+table {
+  border: 1px solid rgba(255, 187, 0, 0.342);
+}
+.styleHeadTable {
+  background: linear-gradient(45deg, rgba(255, 196, 0, 0.24), rgba(255, 187, 0, 0.342));
+}

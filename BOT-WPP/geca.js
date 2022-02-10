@@ -6,6 +6,7 @@ const db_DML = require('./DB_DML');
 const mysql = require('mysql2');
 //const { database } = require('./keys');
 const os = require('os');
+const { options } = require('../WEB/src/routes/GECA');
 
 RutaEjecutablePrograma = __dirname;
 EjecutablePrograma = __filename;
@@ -41,7 +42,8 @@ clientWP.on('ready', async () => {
   await send_mensaje();
   //no permite que pase de los 10 chats VERIFICAR&&&&&&&&&&&&&&
   eliminarExesoChats();
-  //  chatsResagados();
+  //chatsResagados();
+  VerificarChatsNoLeidos();
 });
 
 // * --- sesión exitosa en wp web
@@ -63,22 +65,163 @@ clientWP.on('message', async (msg) => {
   console.log('MIRAMOS SI LLEGA VACIO ', msg.body);
   //verifico si el mensaje que llega es diferente de nulo, esto se realiza por que whatsapp
   //genera dos eventos de mensaje uno vacio y uno con mensaje, descartamos el mensaje vacio de esta forma
-  if (msg.body != '' && (msg.type == 'chat' || msg.type == 'ciphertext')) {
+  if (msg.body != '') {
     //funcion para hacer seguimiento sobre que posicione esta el asesor,obtiene idAsesor,estado del caso y si ya es mensaje fin
     let resultadosss = await Gestion.get_data_list_from_number(numero_chat);
-    console.log('thisssssssssssss', resultadosss[0]);
+
     //enviamos el numero a que en la clase gestión en el metodo get_msg_by_numero se verifique si ya existe ese numero en base de datos
     let msg_control = await Gestion.get_msg_by_numero(numero_chat);
-    console.log('>>>>>>>>>>>', msg_control);
+    console.log('>>>>>>>>>>>', msg_control, msg.type);
     if (msg_control == '') {
-      let comprobar = await Gestion.insert_gestion(numero_chat, 'MSG_FIN', 'Activo');
+      let comprobar = await Gestion.insert_gestion(numero_chat, 'MSG_SALUDO', 'Activo');
 
       // si se insertó el mensaje de saludo respondo
       if (comprobar == true) {
-        const MensajeActualAsesor = `Bienvenido a Maple, en breves minutos un asesor se contactará con usted.`;
+        const MensajeActualAsesor = `Hola, bienvenido al Chat Respira de Maple Respiratory, para gestionar de forma oportuna su requerimiento por favor tener a la mano lapiz, papel y la documentacion necesaria. Si tiene alguna duda en cuanto a las políticas de funcionamiento del chat ingrese al siguiente link:https://www.maplerespiratory.co/de-su-interes/normatividad/.
+      Horario de atencion es de Lunes a Viernes de 7am a 7 pm y los sabados de 7am a 1pm
+      ¿Con quién tengo el gusto de hablar? (Por favor escriba su nombre) ⬇️`;
         clientWP.sendMessage(msg.from, MensajeActualAsesor);
       }
     }
+
+    // ! CUANDO RESPONDE CON EL NOMBRE Y DEVUELVE EL PARENTEZCO
+    else if (resultadosss[0].GES_CULT_MSGBOT == 'MSG_SALUDO' && msg.type === 'chat') {
+      let idArbol = await Gestion.select_id_arbol_by_number(numero_chat);
+      console.log('LLEGA EL ARBOL ', idArbol, resultadosss[0].PKGES_CODIGO);
+      let updateByName = await Gestion.update_gestion(idArbol, 'MSG_NOMBRE', msg.body, 'GES_CDETALLE1');
+
+      const options = [{ title: 'Paciente' }, { title: 'Familiar' }, { title: 'Conocido' }, { title: 'Asegurador(funcionario)' }];
+      const menu = [{ title: 'Por favor seleccione una opción de esta lista', rows: options }];
+      const lista = new List('¿Que parentesco tiene con el paciente?', 'Seleccione una opción', menu);
+      clientWP.sendMessage(msg.from, lista).then(() => {});
+    }
+
+    // ! VALIDA SI LLEGA EL TIPO DE PACIENTE Y RETORNA LISTA DE TIPO DE DOCUMENTO
+    else if (resultadosss[0].GES_CULT_MSGBOT == 'MSG_NOMBRE' && msg.type === 'list_response') {
+      let idArbol = await Gestion.select_id_arbol_by_number(numero_chat);
+      console.log('LLEGA EL ARBOL ', idArbol, resultadosss[0].PKGES_CODIGO);
+      let updateByName = await Gestion.update_gestion(idArbol, 'MSG_TIPOPACIENTE', msg.body, 'GES_CDETALLE2');
+
+      const options = [{ title: 'Cedula de Ciudadania' }, { title: 'Tarjeta de Identidad' }, { title: 'Registro Civil' }, { title: 'Cedula de Extranjeria' }, { title: 'Tarjeta de Extranjeria' }, { title: 'NIT' }, { title: 'Pasaporte' }, { title: 'Permiso de Permanencia' }];
+      const menu = [{ title: 'Por favor seleccione una opción de esta lista', rows: options }];
+      const lista = new List('Seleccione el tipo de documento del paciente', 'Seleccione una opción', menu);
+      clientWP.sendMessage(msg.from, lista).then(() => {});
+    }
+    // ? VALIDAR RESPONIO LA LISTA MSG_TIPOPACIENTE
+    else if (resultadosss[0].GES_CULT_MSGBOT == 'MSG_NOMBRE' && msg.type !== 'list_response') {
+      clientWP.sendMessage(msg.from, 'Por Favor selecciona una opcion de la lista');
+    }
+
+    // ! VALIDA SI LLEGA EL TIPO DE DOCUMENTO Y RETORNA CONFIRMACION NOMBRE PACIENTE
+    else if (resultadosss[0].GES_CULT_MSGBOT == 'MSG_TIPOPACIENTE' && msg.type === 'list_response') {
+      let idArbol = await Gestion.select_id_arbol_by_number(numero_chat);
+      console.log('LLEGA EL ARBOL ', idArbol, resultadosss[0].PKGES_CODIGO);
+      let updateByName = await Gestion.update_gestion(idArbol, 'MSG_TIPODOCUMENTO', msg.body, 'GES_CDETALLE3');
+
+      clientWP.sendMessage(msg.from, 'Me confirma nombre del paciente');
+    }
+    // ? VALIDAR RESPONIO LA LISTA MSG_TIPODOCUMENTO
+    else if (resultadosss[0].GES_CULT_MSGBOT == 'MSG_TIPOPACIENTE' && msg.type !== 'list_response') {
+      clientWP.sendMessage(msg.from, 'Por Favor selecciona una opcion de la lista');
+    }
+
+    // ! VALIDA SI LLEGA CONFIRMACION NOMBRE PACIENTE Y RETORNA CONFIRMACION DE NUMEROS DEL PACIENTE
+    else if (resultadosss[0].GES_CULT_MSGBOT == 'MSG_TIPODOCUMENTO' && msg.type === 'chat') {
+      let idArbol = await Gestion.select_id_arbol_by_number(numero_chat);
+      console.log('LLEGA EL ARBOL ', idArbol, resultadosss[0].PKGES_CODIGO);
+      let updateByName = await Gestion.update_gestion(idArbol, 'MSG_CONFIRNOMBRE', msg.body, 'GES_CDETALLE4');
+
+      clientWP.sendMessage(msg.from, 'Me confirma dos numeros de contacto con el paciente \n Por ejemplo: 3216549870 - 9876541');
+    }
+
+    // ! VALIDA SI LLEGA CONFIRMACION NUMEROS PACIENTE Y RETORNA CONTACTO COVID ¿?
+    else if (resultadosss[0].GES_CULT_MSGBOT == 'MSG_CONFIRNOMBRE' && msg.type === 'chat') {
+      let idArbol = await Gestion.select_id_arbol_by_number(numero_chat);
+      console.log('LLEGA EL ARBOL ', idArbol, resultadosss[0].PKGES_CODIGO);
+      let updateByName = await Gestion.update_gestion(idArbol, 'MSG_CONFIRNUMEROS', msg.body, 'GES_CDETALLE5');
+
+      const options = [{ title: 'Si' }, { title: 'No' }];
+      const menu = [{ title: 'Por favor seleccione una opción de esta lista', rows: options }];
+      const lista = new List('¿Ha tenido contacto con alguien covid positivo en los ultimos 14 días o ha tenido contacto estrecho?', 'Seleccione una opción', menu);
+      clientWP.sendMessage(msg.from, lista).then(() => {});
+    }
+
+    // ! VALIDA SI LLEGA CONTACTO COVID ¿? Y RETORNA LISTA SINTOMAS
+    else if (resultadosss[0].GES_CULT_MSGBOT == 'MSG_CONFIRNUMEROS' && msg.type === 'list_response') {
+      let idArbol = await Gestion.select_id_arbol_by_number(numero_chat);
+      console.log('LLEGA EL ARBOL ', idArbol, resultadosss[0].PKGES_CODIGO);
+      let updateByName = await Gestion.update_gestion(idArbol, 'MSG_CONTACTCOVID', msg.body, 'GES_CDETALLE6');
+
+      const options = [{ title: 'Fiebre' }, { title: 'Congestion Nasal' }, { title: 'Dolor de Cabeza' }, { title: 'Dificultad al respirar' }, { title: 'Dolor de garganta' }, { title: 'Perdida del gusto' }, { title: 'Perdida del olfato' }];
+      const menu = [{ title: 'Por favor seleccione una opción de esta lista', rows: options }];
+      const lista = new List('¿Ha tenido en los ultimos 14 dias alguno de los siguientes sintomas?', 'Seleccione una opción', menu);
+      clientWP.sendMessage(msg.from, lista).then(() => {});
+    }
+    // ? VALIDAR RESPONIO LA LISTA MSG_CONTACTCOVID
+    else if (resultadosss[0].GES_CULT_MSGBOT == 'MSG_CONFIRNUMEROS' && msg.type !== 'list_response') {
+      clientWP.sendMessage(msg.from, 'Por Favor selecciona una opcion de la lista');
+    }
+
+    // ! VALIDA SI LLEGA SINTOMA Y RETORNA SOLICITUD CIUDAD
+    else if (resultadosss[0].GES_CULT_MSGBOT == 'MSG_CONTACTCOVID' && msg.type === 'list_response') {
+      let idArbol = await Gestion.select_id_arbol_by_number(numero_chat);
+      console.log('LLEGA EL ARBOL ', idArbol, resultadosss[0].PKGES_CODIGO);
+      let updateByName = await Gestion.update_gestion(idArbol, 'MSG_SINTOMA', msg.body, 'GES_CDETALLE7');
+
+      clientWP.sendMessage(msg.from, '¿De que ciudad se comunica?');
+    }
+
+    // ! VALIDA SI LLEGA CIUDAD Y RETORNA LISTA EPS
+    else if (resultadosss[0].GES_CULT_MSGBOT == 'MSG_SINTOMA' && msg.type === 'chat') {
+      let idArbol = await Gestion.select_id_arbol_by_number(numero_chat);
+      console.log('LLEGA EL ARBOL ', idArbol, resultadosss[0].PKGES_CODIGO);
+      let updateByName = await Gestion.update_gestion(idArbol, 'MSG_CIUDAD', msg.body, 'GES_CDETALLE8');
+
+      const options = [{ title: 'Sanitas' }, { title: 'Famisanar' }, { title: 'Salud Total' }, { title: 'Medimas' }, { title: 'Nueva EPS' }, { title: 'Seguros Bolivar' }, { title: 'Medplus' }, { title: 'Particular' }, { title: 'Otros' }];
+      const menu = [{ title: 'Por favor seleccione una opción de esta lista', rows: options }];
+      const lista = new List('¿Cuál es la Eps que lo remite?', 'Seleccione una opción', menu);
+      clientWP.sendMessage(msg.from, lista).then(() => {});
+    }
+
+    // ! VALIDA SI LLEGA EPS Y RETORNA SOLICITUD SEDE
+    else if (resultadosss[0].GES_CULT_MSGBOT == 'MSG_CIUDAD' && msg.type === 'list_response') {
+      let idArbol = await Gestion.select_id_arbol_by_number(numero_chat);
+      console.log('LLEGA EL ARBOL ', idArbol, resultadosss[0].PKGES_CODIGO);
+      let updateByName = await Gestion.update_gestion(idArbol, 'MSG_EPS', msg.body, 'GES_CDETALLE9');
+
+      clientWP.sendMessage(msg.from, 'Indique a que sede lo estan remitiendo');
+    }
+    // ? VALIDAR RESPONIO LA LISTA MSG_EPS
+    else if (resultadosss[0].GES_CULT_MSGBOT == 'MSG_CIUDAD' && msg.type !== 'list_response') {
+      clientWP.sendMessage(msg.from, 'Por Favor selecciona una opcion de la lista');
+    }
+
+    // ! VALIDA SI LLEGA SEDE Y RETORNA CUAL ES SU SOLICITUD ¿?
+    else if (resultadosss[0].GES_CULT_MSGBOT == 'MSG_EPS' && msg.type === 'chat') {
+      let idArbol = await Gestion.select_id_arbol_by_number(numero_chat);
+      console.log('LLEGA EL ARBOL ', idArbol, resultadosss[0].PKGES_CODIGO);
+      let updateByName = await Gestion.update_gestion(idArbol, 'MSG_SEDE', msg.body, 'GES_CDETALLE10');
+
+      clientWP.sendMessage(msg.from, '¿Cuál es su solicitud?');
+    }
+
+    // ! VALIDA SI LLEGA DSC SOLICITUD Y RETORNA MENSAJE FINAL
+    else if (resultadosss[0].GES_CULT_MSGBOT == 'MSG_SEDE' && msg.type === 'chat') {
+      let idArbol = await Gestion.select_id_arbol_by_number(numero_chat);
+      console.log('LLEGA EL ARBOL ', idArbol, resultadosss[0].PKGES_CODIGO);
+      let updateByName = await Gestion.update_gestion(idArbol, 'MSG_FIN', msg.body, 'GES_CDETALLE11');
+
+      clientWP.sendMessage(msg.from, 'Por favor permitanos un momento, un asesor en unos minutos lo atendera, gracias ');
+    }
+
+    // ! VALIDA TERMINO ARBOL
+    else if (resultadosss[0].GES_CULT_MSGBOT == 'MSG_SOLICITUD' && msg.type === 'chat') {
+      let idArbol = await Gestion.select_id_arbol_by_number(numero_chat);
+      console.log('LLEGA EL ARBOL ', idArbol, resultadosss[0].PKGES_CODIGO);
+
+      clientWP.sendMessage(msg.from, 'Por favor permitanos un momento, un asesor en unos minutos lo atendera, gracias ');
+    }
+
     //ocasion para cuando el cliente esta en cola de espera le responde esto
     else if (resultadosss[0] == null && resultadosss[1] == null && resultadosss[2] == 'MSG_FIN') {
       console.log('SI ENTREEEEEEEEEEEEEEEEEEEEEEEEEEEEE');
@@ -96,7 +239,7 @@ clientWP.on('message', async (msg) => {
       }
     }
     //ocasion para cuando ya se asigna el arbol, el bot solo pone en la BD.
-    else if (resultadosss[0] != null && resultadosss[1] != null && resultadosss[2] == 'MSG_FIN') {
+    else if (resultadosss[0].FKGES_NPER_CODIGO != null && resultadosss[0].GES_ESTADO_CASO != null && resultadosss[0].GES_CULT_MSGBOT == 'MSG_FIN') {
       let id_gestion = await Gestion.get_id_by_numero(numero_chat);
       console.log('si entro cuando ya no son nulos jajajaja');
       await Mensaje.insert_mensaje(id_gestion, numero_chat, msg.body, 'chat');
@@ -131,19 +274,38 @@ async function chatsResagados() {
   try {
     const chatIds = await clientWP.pupPage.evaluate(async () => {
       const chats = await window.WWebJS.getChats();
+
       return chats.map((chat) => chat);
     });
     for (let chats of chatIds) {
+      console.log('----->', chatIds);
       var EstadoMensaje = chats.unreadCount;
       console.log('ññññññ', EstadoMensaje);
       console.log('serializado', chats.id._serialized);
-      if (EstadoMensaje == 1) {
+      if (EstadoMensaje >= 1) {
         clientWP.sendMessage(chats.id._serialized, 'Holirijilla');
         msg.reply('Puedes repetir lo que dijiste por favor?');
       }
     }
   } catch (error) {
     ControlErrores(error);
+  }
+}
+
+async function VerificarChatsNoLeidos() {
+  Correcto = true;
+
+  clientWP.getChats().then((Chats) => {
+    //console.log(Chats);
+    Chats.map(async (Chat) => MensajeChat(await Chat.fetchMessages({ limit: 1 }), Chat));
+  });
+  await sleep(10000);
+}
+
+function MensajeChat(Mensaje, Chat) {
+  if (Mensaje[0].fromMe == false && Chat.unreadCount > 0) {
+    console.log('**************************** Recuperar', Chat.id.user);
+    clientWP.sendMessage(Chat.id._serialized, 'Reenvia el ultimo mensaje');
   }
 }
 
@@ -168,11 +330,11 @@ const envioMasivo = async () => {
   const interval = () => {
     console.log('Esperando Numero');
     setTimeout(() => {
-      interval()
+      interval();
     }, 3000);
-  }
-  interval()
-}
+  };
+  interval();
+};
 
 function GetFechaActual() {
   Mes = new Date().getMonth() + 1;
