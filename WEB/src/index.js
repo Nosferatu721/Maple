@@ -25,7 +25,7 @@ app.use(express.static(path.join(__dirname, '../node_modules/datatables.net/js')
 app.use(express.static(path.join(__dirname, '../node_modules/datatables.net-bs4')));
 
 // * Settings
-app.set('PORT', process.env.PORT || 8082);
+app.set('PORT', process.env.PORT || 8083);
 app.set('views', path.join(__dirname, 'views'));
 app.engine(
   '.hbs',

@@ -14,7 +14,7 @@ helpers.obtain = (obj,name) =>{
       if(key == name){
         let groups = value.split(",")
         console.log(groups);
-        if (true){//laika))
+        if (true){
           console.log(groups)
           split2 = helpers.filterItems(groups, 'CN')
           let nombre = (split2[0].split("="))[1]
