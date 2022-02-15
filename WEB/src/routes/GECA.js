@@ -4,6 +4,7 @@ const path = require('path');
 const { userInfo } = require('os');
 const keys = require('../keys');
 const { query } = require('../database');
+const ExcelJS = require('exceljs');
 
 // * Vistas
 router.get('/transferencias', (req, res) => {
@@ -136,17 +137,23 @@ router.post('/cambioEstado', (req, res) => {
 });
 
 ///SON DOS RUTAS UNA RECOGE LOS ULTIMOS CASOS CON UN SELECT Y  LA SEGUNDA LE PONE LA LLAVE DE RPERMISO A ESTA TABLA
-router.post('/asignacionSelect', (req, res) => {
+router.post('/asignacionSelect', async (req, res) => {
   //const { PKPER_NCODIGO} = req.body;
 
   //console.log("recibo de id y de estado",PKPER_NCODIGO,PER_AUXILIAR);
 
-  const sql = 'SELECT * FROM ' + keys.database.database + '.tbl_gestion WHERE  FKGES_NPER_CODIGO is null  AND GES_ESTADO_CASO is null AND GES_CULT_MSGBOT="MSG_FIN" AND GES_CESTADO="Activo" ORDER BY PKGES_CODIGO asc LIMIT 1 ;';
+  const sql = `SELECT * FROM ${keys.database.database}.tbl_gestion WHERE FKGES_NPER_CODIGO IS NULL AND GES_ESTADO_CASO IS NULL AND GES_CULT_MSGBOT = "MSG_FIN" AND GES_CESTADO = "Activo" ORDER BY GES_CMSGOUTBOUND DESC LIMIT 1`;
   db.promise()
     .query(sql)
-    .then(([result, fields]) => {
-      // console.log("responde",result[0].contador);
-      res.json({ result });
+    .then(async ([result, fields]) => {
+      if (result.length > 0) {
+        const sqlOutbound = `SELECT * FROM ${keys.database.database}.tbl_outbount WHERE PKOUT_CODIGO = ?`
+        let [rowsOutbound] = await db.promise().query(sqlOutbound, [result[0].GES_FK_OUTBOUND]);
+        res.json({ result, outbound: rowsOutbound[0] });
+      } else {
+        // console.log("responde",result[0].contador);
+        res.json({ result });
+      }
     });
 });
 
@@ -232,11 +239,58 @@ router.post('/searchChat', (req, res) => {
 // * Cunsultar Plantillas
 router.get('/getPlantillas', async (req, res) => {
   try {
-    const sqlSelect = `SELECT * FROM dbp_whatsappmapple.TBL_RESTANDAR WHERE EST_CCONSULTA = 'cmbPlantillas'`;
+    const sqlSelect = `SELECT * FROM ${keys.database.database}.TBL_RESTANDAR WHERE EST_CCONSULTA = 'cmbPlantillas'`;
     let [rows] = await db.promise().query(sqlSelect);
     res.json(rows);
   } catch (error) {
     console.log(`Error:: ${error}`);
+  }
+});
+
+// * Cargue Masivo
+router.get('/viewCargue', (req, res) => {
+  res.render('GECA/viewCargue', { title: 'Cargue Masivo' });
+});
+router.post('/cargarExcel', (req, res) => {
+  try {
+    console.log(req.files.fileExcel.name);
+    let excel = req.files.fileExcel,
+      nombreArchivo = `x${req.user.PKPER_NCODIGO}x${excel.name}`,
+      rutaArchivo = path.resolve(`./src/public/doc/Excel/${nombreArchivo}`);
+    // * Guardar Excel
+    excel.mv(rutaArchivo, (err) => {
+      if (err) {
+        return res.status(500).send({ message: err });
+      } else {
+        const workbook = new ExcelJS.Workbook();
+        workbook.xlsx
+          .readFile(rutaArchivo)
+          .then(async () => {
+            let hojas = workbook.worksheets.map((sheet) => sheet.name),
+              selectedHoja1 = workbook.getWorksheet(hojas[0]),
+              rowsExcel = selectedHoja1.actualRowCount,
+              columnsExcel = selectedHoja1.actualColumnCount;
+
+            for (let i = 1; i <= 2; i++) {
+              let numero = selectedHoja1.getRow(i).getCell(1).toString(),
+                mensaje = selectedHoja1.getRow(i).getCell(2).toString();
+
+              const data = {
+                OUT_NUMERO_COMUNICA: numero,
+                OUT_CULT_MSGBOT: mensaje,
+                OUT_CDETALLE: 'POR ENVIAR',
+              };
+
+              const sqlInsert = `INSERT INTO ${keys.database.database}.tbl_outbount SET ?`;
+              let [resInsert] = await db.promise().query(sqlInsert, [data]);
+              console.log(resInsert);
+            }
+          })
+          .catch((err) => console.log(err));
+      }
+    });
+  } catch (error) {
+    console.log(error);
   }
 });
 

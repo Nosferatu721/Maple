@@ -652,3 +652,17 @@
 .plantillas .divPlant i:hover {
   color: #056162;
 }
+
+.cont_viewCargue {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.cont_viewCargue form {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}

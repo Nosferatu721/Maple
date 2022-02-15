@@ -16,6 +16,7 @@ EjecutableProgram = __filename;
 const Gestion = new db_DML.Gestion();
 //const Permiso = new db_DML.Permiso();
 const Mensaje = new db_DML.Mensaje();
+const Outbound = new db_DML.Outbound();
 
 var LineasAutorizadas = ['3053599685', '3013775932', '3054818254', '3106542257', '3006870762'];
 
@@ -37,7 +38,7 @@ clientWP.on('qr', (qr) => {
 
 clientWP.on('ready', async () => {
   // * Ver Envios Masivos en DB
-  // envioMasivo()
+  envioMasivo();
   //
   await send_mensaje();
   //no permite que pase de los 10 chats VERIFICAR&&&&&&&&&&&&&&
@@ -215,11 +216,28 @@ clientWP.on('message', async (msg) => {
     }
 
     // ! VALIDA TERMINO ARBOL
-    else if (resultadosss[0].GES_CULT_MSGBOT == 'MSG_SOLICITUD' && msg.type === 'chat') {
+    else if (resultadosss[0].GES_CULT_MSGBOT == 'MSG_FIN' && msg.type === 'chat') {
       let idArbol = await Gestion.select_id_arbol_by_number(numero_chat);
       console.log('LLEGA EL ARBOL ', idArbol, resultadosss[0].PKGES_CODIGO);
 
       clientWP.sendMessage(msg.from, 'Por favor permitanos un momento, un asesor en unos minutos lo atendera, gracias ');
+    }
+
+    // ! VALIDA TERMINO ARBOL
+    else if (resultadosss[0].GES_CULT_MSGBOT == 'MSG_OUTBOUND' && msg.type === 'list_response') {
+      let idArbol = await Gestion.select_id_arbol_by_number(numero_chat);
+      console.log('LLEGA EL ARBOL ', idArbol, resultadosss[0].PKGES_CODIGO);
+      if (msg.body === 'Si') {
+        let updateByName = await Gestion.update_gestion(idArbol, 'MSG_FIN', msg.body, 'GES_CMSGOUTBOUND');
+        clientWP.sendMessage(msg.from, 'Por favor permitanos un momento, un asesor en unos minutos lo atendera, gracias');
+      } else {
+        let updateByName = await Gestion.cerrarOutbound(idArbol, msg.body);
+        clientWP.sendMessage(msg.from, 'Gracias por su atencion, que tengas un buen dia');
+      }
+    }
+    // ? VALIDAR RESPONIO LA LISTA MSG_EPS
+    else if (resultadosss[0].GES_CULT_MSGBOT == 'MSG_OUTBOUND' && msg.type !== 'list_response') {
+      clientWP.sendMessage(msg.from, 'Por Favor selecciona una opcion de la lista');
     }
 
     //ocasion para cuando el cliente esta en cola de espera le responde esto
@@ -327,13 +345,33 @@ async function eliminarExesoChats() {
 }
 
 const envioMasivo = async () => {
-  const interval = () => {
-    console.log('Esperando Numero');
-    setTimeout(() => {
-      interval();
-    }, 3000);
+  const mensajeMasivo = async () => {
+    try {
+      let chatPorEnviar = await Outbound.porEnviar();
+      // * Validar si hay un mensaje Outbound por enviar
+      if (chatPorEnviar) {
+        // * Enviar Mensaje Outbound
+        clientWP.sendMessage(`${chatPorEnviar.OUT_NUMERO_COMUNICA}@c.us`, chatPorEnviar.OUT_CULT_MSGBOT).then(async (res) => {
+          // * Enviar lista si desea el cliente hablar con un agente
+          const options = [{ title: 'Si' }, { title: 'No' }];
+          const menu = [{ title: 'Por favor seleccione una opción de esta lista', rows: options }];
+          const lista = new List('¿Desea comunicarse con un Agente?', 'Seleccione una opción', menu);
+          clientWP.sendMessage(`${chatPorEnviar.OUT_NUMERO_COMUNICA}@c.us`, lista);
+          // * Despues de enviar se actualiza el registro y se registra en tabla tbl_gestion
+          await Outbound.actualizar(chatPorEnviar.PKOUT_CODIGO);
+          await Gestion.insert_gestion(chatPorEnviar.OUT_NUMERO_COMUNICA, 'MSG_OUTBOUND', 'Activo', chatPorEnviar.PKOUT_CODIGO);
+        });
+      }
+
+      // ? Repito
+      setTimeout(() => {
+        mensajeMasivo();
+      }, 15000);
+    } catch (error) {
+      console.log(error);
+    }
   };
-  interval();
+  mensajeMasivo();
 };
 
 function GetFechaActual() {

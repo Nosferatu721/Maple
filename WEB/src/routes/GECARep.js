@@ -25,6 +25,7 @@ router.get('/reportes', async (req, res) => {
 
   const sqlChatsLive = `SELECT * FROM ${keys.database.database}.tbl_gestion INNER JOIN dbp_whatsappmapple.tbl_rpermiso ON FKGES_NPER_CODIGO = PKPER_NCODIGO WHERE GES_ESTADO_CASO = 'ABIERTO'`;
   let [rowsChatsLive] = await db.promise().query(sqlChatsLive);
+  console.log(rowsChatsLive);
   res.render('GECA/reportes', { title: 'Reportes', agentes: rowsAgentes, chatsLive: rowsChatsLive });
 });
 
