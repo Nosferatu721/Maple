@@ -112,6 +112,7 @@ class Gestion {
   }
 
   async cerrarOutbound(id, respuesta) {
+    let comprobar = false;
     const sql = `UPDATE ${DB}.tbl_gestion SET GES_CULT_MSGBOT = 'MSG_CLOSE', GES_CMSGOUTBOUND = '${respuesta}' AND GES_CESTADO = 'Inactivo' WHERE PKGES_CODIGO = '${id}' AND GES_CESTADO = 'Activo'`;
     await connDB
       .promise()

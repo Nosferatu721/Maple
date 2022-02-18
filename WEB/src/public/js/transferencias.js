@@ -147,7 +147,7 @@ document.addEventListener('DOMContentLoaded', () => {
               let mensajeBienvenida = 'Tiene un nuevo cliente en este chat';
               // console.log('************************ESTE ES EL MENSAJE', mensaje);
               idArbol = idArboll;
-              let msjConcatenadoo = mensajeBienvenida + '<br>' + '<b>Este es un chat Outbound</b><br>';
+              let msjConcatenadoo = mensajeBienvenida + '<br>' + '<b>Este es un chat Outbound</b> - Cargue: ' + res.outbound.OUT_CDETALLE1 +'<br>';
               msjConcatenadoo = msjConcatenadoo + '<b>Mensaje Masivo Enviado:</b><br><i>' + res.outbound.OUT_CULT_MSGBOT + '</i>';
 
               asignacion(idPer, idArbol);

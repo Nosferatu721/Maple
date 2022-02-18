@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Akaya+Telivigala&display=swap');
 .container_dashboard,
 .container_inicio {
   height: calc(100vh - 80px);
@@ -665,4 +666,67 @@
   justify-content: center;
   align-items: center;
   flex-direction: column;
+}
+
+/* cont_detallesExcel */
+.cont_detallesExcel .detalles {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+.cont_detallesExcel .detalles div {
+  justify-self: center;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+}
+
+.cont_detallesExcel .detalles .cardsito {
+  position: relative;
+  width: 300px;
+  background-color: #fa8a62;
+  border-radius: 20px;
+  margin-bottom: 60px;
+  text-align: center;
+  font-family: 'Akaya Telivigala', cursive;
+}
+
+.cont_detallesExcel .detalles .cardsito h6 {
+  position: absolute;
+  top: 5px;
+  width: 100%;
+  font-size: 30px;
+  margin: 0;
+}
+
+.cont_detallesExcel .detalles .cardsito .icon {
+  position: absolute;
+  top: 0;
+  right: 3px;
+  font-size: 38px;
+  transform: rotate(45deg);
+}
+
+.cont_detallesExcel .detalles .cardsito .content {
+  position: relative;
+  top: 48px;
+  background-color: #fff;
+  border-radius: 20px;
+  padding: 15px 25px;
+  color: #333;
+  font-family: 'Akaya Telivigala', cursive;
+  font-size: 25px;
+}
+.cont_detallesExcel .detalles .cardsito .content ul .columnExcel {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+  cursor: pointer;
+  border-bottom: 2px solid #fff;
+}
+.cont_detallesExcel .detalles .cardsito .content ul .columnExcel:active {
+  color: #fa8a62;
+  border-bottom: 2px solid #fa8a62;
 }

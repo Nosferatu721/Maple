@@ -8,45 +8,49 @@
       <li>
         <div class='collapsible-header'><i class='bx bx-bot'></i> Chat Con Bot</div>
         <div class='collapsible-body'>
-          <table class='striped highlight centered'>
-            <thead>
-            </thead>
-            <tbody>
-              <tr>
-                <td><b>Nombre:</b> {{rowsSelectGes.GES_CDETALLE1}}</td>
-              </tr>
-              <tr>
-                <td><b>Parentesco:</b> {{rowsSelectGes.GES_CDETALLE2}}</td>
-              </tr>
-              <tr>
-                <td><b>Tipo de Documento:</b> {{rowsSelectGes.GES_CDETALLE3}}</td>
-              </tr>
-              <tr>
-                <td><b>Nombre Confirmado:</b> {{rowsSelectGes.GES_CDETALLE4}}</td>
-              </tr>
-              <tr>
-                <td><b>Numeros de Contacto:</b> {{rowsSelectGes.GES_CDETALLE5}}</td>
-              </tr>
-              <tr>
-                <td><b>¿Contacto con alguien con Covid? (Ultimos 14 dias):</b> {{rowsSelectGes.GES_CDETALLE6}}</td>
-              </tr>
-              <tr>
-                <td><b>¿Ha tenido alguno de los siguientes sintomas? (Ultimos 14 dias):</b> {{rowsSelectGes.GES_CDETALLE7}}</td>
-              </tr>
-              <tr>
-                <td><b>Ciudad:</b> {{rowsSelectGes.GES_CDETALLE8}}</td>
-              </tr>
-              <tr>
-                <td><b>EPS:</b> {{rowsSelectGes.GES_CDETALLE9}}</td>
-              </tr>
-              <tr>
-                <td><b>Sede:</b> {{rowsSelectGes.GES_CDETALLE10}}</td>
-              </tr>
-              <tr>
-                <td><b>Solicitud Cliente:</b> {{rowsSelectGes.GES_CDETALLE11}}</td>
-              </tr>
-            </tbody>
-          </table>
+          {{#if (isOutbound rowsSelectGes.GES_FK_OUTBOUND)}}
+            <p>Es Outbound</p>
+          {{else}}
+            <table class='striped highlight centered'>
+              <thead>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><b>Nombre:</b> {{rowsSelectGes.GES_CDETALLE1}}</td>
+                </tr>
+                <tr>
+                  <td><b>Parentesco:</b> {{rowsSelectGes.GES_CDETALLE2}}</td>
+                </tr>
+                <tr>
+                  <td><b>Tipo de Documento:</b> {{rowsSelectGes.GES_CDETALLE3}}</td>
+                </tr>
+                <tr>
+                  <td><b>Nombre Confirmado:</b> {{rowsSelectGes.GES_CDETALLE4}}</td>
+                </tr>
+                <tr>
+                  <td><b>Numeros de Contacto:</b> {{rowsSelectGes.GES_CDETALLE5}}</td>
+                </tr>
+                <tr>
+                  <td><b>¿Contacto con alguien con Covid? (Ultimos 14 dias):</b> {{rowsSelectGes.GES_CDETALLE6}}</td>
+                </tr>
+                <tr>
+                  <td><b>¿Ha tenido alguno de los siguientes sintomas? (Ultimos 14 dias):</b> {{rowsSelectGes.GES_CDETALLE7}}</td>
+                </tr>
+                <tr>
+                  <td><b>Ciudad:</b> {{rowsSelectGes.GES_CDETALLE8}}</td>
+                </tr>
+                <tr>
+                  <td><b>EPS:</b> {{rowsSelectGes.GES_CDETALLE9}}</td>
+                </tr>
+                <tr>
+                  <td><b>Sede:</b> {{rowsSelectGes.GES_CDETALLE10}}</td>
+                </tr>
+                <tr>
+                  <td><b>Solicitud Cliente:</b> {{rowsSelectGes.GES_CDETALLE11}}</td>
+                </tr>
+              </tbody>
+            </table>
+          {{/if}}
         </div>
       </li>
     </ul>
@@ -57,7 +61,7 @@
           <table class='striped highlight centered'>
             <thead class='styleHeadTable'>
               <tr>
-                <th><i style="float: left">Cliente</i><i style="float: right">Agente</i></th>
+                <th><i style='float: left'>Cliente</i><i style='float: right'>Agente</i></th>
               </tr>
             </thead>
             <tbody>

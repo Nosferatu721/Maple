@@ -1,0 +1,50 @@
+<div class='cont_detallesExcel'>
+  <h3 class='center'>Envio Masivo</h3>
+  <br />
+  <h5 class='center'>Nombre del Excel: <b>{{nombreOriginal}}</b></h5>
+  <br />
+  <div class='detalles'>
+    <div>
+      <div class='cardsito'>
+        <h6>Columnas Excel</h6>
+        <i class='bx bx-columns icon'></i>
+        <div class='content'>
+          <ul>
+            {{#each titleColumns}}
+              <li class='columnExcel'><i class='bx bx-plus-circle'></i> {{this}}</li>
+            {{/each}}
+          </ul>
+        </div>
+      </div>
+
+      <div class='cardsito'>
+        <h6>Numeros - <b>{{numerosCount}}</b></h6>
+        <i class='bx bx-columns icon'></i>
+        <div class='content'>
+          <ul>
+            {{#each numerosExcel}}
+              <li>{{this}}</li>
+            {{/each}}
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div class='row'>
+        <form class='col s12' action="/GECA/envioMasivo" method="POST">
+          <input type='text' name='rutaExcel' value='{{rutaArchivo}}' class='displayNone' />
+          <input type='text' name='nombreExcel' value='{{nombreOriginal}}' class='displayNone' />
+          <div class='row'>
+            <div class='input-field col s12'>
+              <textarea id='cuerpoMsg' name='cuerpoMsg' class='materialize-textarea' style="min-height: 150px;"></textarea>
+              <label for='cuerpoMsg'>Estructura del mensaje</label>
+            </div>
+          </div>
+          <button id='btnEnviarMsgs' class='waves-effect waves-light btn black lighten-1 amber-text text-darken-1' type='submit'><i class='bx bxs-send'></i> Cargar</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src='/js/detallesExcel.js'></script>

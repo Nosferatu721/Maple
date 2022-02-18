@@ -215,13 +215,13 @@ clientWP.on('message', async (msg) => {
       clientWP.sendMessage(msg.from, 'Por favor permitanos un momento, un asesor en unos minutos lo atendera, gracias ');
     }
 
-    // ! VALIDA TERMINO ARBOL
-    else if (resultadosss[0].GES_CULT_MSGBOT == 'MSG_FIN' && msg.type === 'chat') {
-      let idArbol = await Gestion.select_id_arbol_by_number(numero_chat);
-      console.log('LLEGA EL ARBOL ', idArbol, resultadosss[0].PKGES_CODIGO);
+    // // ! VALIDA TERMINO ARBOL
+    // else if (resultadosss[0].GES_CULT_MSGBOT == 'MSG_FIN' && msg.type === 'chat') {
+    //   let idArbol = await Gestion.select_id_arbol_by_number(numero_chat);
+    //   console.log('LLEGA EL ARBOL ', idArbol, resultadosss[0].PKGES_CODIGO);
 
-      clientWP.sendMessage(msg.from, 'Por favor permitanos un momento, un asesor en unos minutos lo atendera, gracias ');
-    }
+    //   clientWP.sendMessage(msg.from, 'Por favor permitanos un momento, un asesor en unos minutos lo atendera, gracias ');
+    // }
 
     // ! VALIDA TERMINO ARBOL
     else if (resultadosss[0].GES_CULT_MSGBOT == 'MSG_OUTBOUND' && msg.type === 'list_response') {
@@ -240,7 +240,7 @@ clientWP.on('message', async (msg) => {
       clientWP.sendMessage(msg.from, 'Por Favor selecciona una opcion de la lista');
     }
 
-    //ocasion para cuando el cliente esta en cola de espera le responde esto
+    // ocasion para cuando el cliente esta en cola de espera le responde esto
     else if (resultadosss[0] == null && resultadosss[1] == null && resultadosss[2] == 'MSG_FIN') {
       console.log('SI ENTREEEEEEEEEEEEEEEEEEEEEEEEEEEEE');
 
@@ -256,7 +256,7 @@ clientWP.on('message', async (msg) => {
         clientWP.sendMessage(msg.from, mensajeEspera);
       }
     }
-    //ocasion para cuando ya se asigna el arbol, el bot solo pone en la BD.
+    // TODO ocasion para cuando ya se asigna el arbol, el bot solo pone en la BD.
     else if (resultadosss[0].FKGES_NPER_CODIGO != null && resultadosss[0].GES_ESTADO_CASO != null && resultadosss[0].GES_CULT_MSGBOT == 'MSG_FIN') {
       let id_gestion = await Gestion.get_id_by_numero(numero_chat);
       console.log('si entro cuando ya no son nulos jajajaja');
