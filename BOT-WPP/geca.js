@@ -302,10 +302,12 @@ async function VerificarChatsNoLeidos() {
   await sleep(10000);
 }
 
-function MensajeChat(Mensaje, Chat) {
-  if (Mensaje[0].fromMe == false && Chat.unreadCount > 0) {
-    console.log('**************************** Recuperar', Chat.id.user);
-    clientWP.sendMessage(Chat.id._serialized, 'Reenvia el ultimo mensaje');
+function MensajeChat(Mensajes, Chat) {
+  if (Mensajes[0] !== undefined) {
+    if (Mensajes[0].id.fromMe == false && Chat.unreadCount > 0) {
+      console.log('**************************** Recuperar', Chat.id.user);
+      clientWP.sendMessage(Chat.id._serialized, 'Reenvia el ultimo mensaje');
+    }
   }
 }
 
