@@ -4,6 +4,8 @@ const path = require('path');
 const { userInfo } = require('os');
 const keys = require('../keys');
 const { query } = require('../database');
+const ExcelJS = require('exceljs');
+const { log } = require('console');
 
 // * Vistas
 router.get('/transferencias', (req, res) => {
@@ -20,6 +22,7 @@ router.get('/transferencias', (req, res) => {
 router.get('/backoffice', async (req, res) => {
   const sqlSelect = `SELECT * FROM ${keys.database.database}.tbl_gestion INNER JOIN ${keys.database.database}.tbl_rpermiso ON FKGES_NPER_CODIGO = PKPER_NCODIGO WHERE GES_ESTADO_CASO = 'CERRADO' ORDER BY PKGES_CODIGO DESC`;
   let [rows] = await db.promise().query(sqlSelect);
+  log(rows);
   res.render('GECA/backoffice', { title: 'BackOffice', chatsCerrados: rows });
 });
 
@@ -136,17 +139,23 @@ router.post('/cambioEstado', (req, res) => {
 });
 
 ///SON DOS RUTAS UNA RECOGE LOS ULTIMOS CASOS CON UN SELECT Y  LA SEGUNDA LE PONE LA LLAVE DE RPERMISO A ESTA TABLA
-router.post('/asignacionSelect', (req, res) => {
+router.post('/asignacionSelect', async (req, res) => {
   //const { PKPER_NCODIGO} = req.body;
 
   //console.log("recibo de id y de estado",PKPER_NCODIGO,PER_AUXILIAR);
 
-  const sql = 'SELECT * FROM ' + keys.database.database + '.tbl_gestion WHERE  FKGES_NPER_CODIGO is null  AND GES_ESTADO_CASO is null AND GES_CULT_MSGBOT="MSG_FIN" AND GES_CESTADO="Activo" ORDER BY PKGES_CODIGO asc LIMIT 1 ;';
+  const sql = `SELECT * FROM ${keys.database.database}.tbl_gestion WHERE FKGES_NPER_CODIGO IS NULL AND GES_ESTADO_CASO IS NULL AND GES_CULT_MSGBOT = "MSG_FIN" AND GES_CESTADO = "Activo" ORDER BY GES_CMSGOUTBOUND DESC LIMIT 1`;
   db.promise()
     .query(sql)
-    .then(([result, fields]) => {
-      // console.log("responde",result[0].contador);
-      res.json({ result });
+    .then(async ([result, fields]) => {
+      if (result.length > 0) {
+        const sqlOutbound = `SELECT * FROM ${keys.database.database}.tbl_outbount WHERE PKOUT_CODIGO = ?`;
+        let [rowsOutbound] = await db.promise().query(sqlOutbound, [result[0].GES_FK_OUTBOUND]);
+        res.json({ result, outbound: rowsOutbound[0] });
+      } else {
+        // console.log("responde",result[0].contador);
+        res.json({ result });
+      }
     });
 });
 
@@ -232,12 +241,116 @@ router.post('/searchChat', (req, res) => {
 // * Cunsultar Plantillas
 router.get('/getPlantillas', async (req, res) => {
   try {
-    const sqlSelect = `SELECT * FROM dbp_whatsappmapple.TBL_RESTANDAR WHERE EST_CCONSULTA = 'cmbPlantillas'`;
+    const sqlSelect = `SELECT * FROM ${keys.database.database}.TBL_RESTANDAR WHERE EST_CCONSULTA = 'cmbPlantillas'`;
     let [rows] = await db.promise().query(sqlSelect);
     res.json(rows);
   } catch (error) {
     console.log(`Error:: ${error}`);
   }
+});
+
+// * Cargue Masivo
+router.get('/viewCargue', (req, res) => {
+  res.render('GECA/viewCargue', { title: 'Cargue Masivo' });
+});
+router.post('/cargarExcel', (req, res) => {
+  try {
+    let excel = req.files.fileExcel,
+      nombreArchivo = `x${req.user.PKPER_NCODIGO}x${excel.name}`,
+      rutaArchivo = path.resolve(`./src/public/doc/Excel/${nombreArchivo}`);
+    // * Guardar Excel
+    excel.mv(rutaArchivo, (err) => {
+      if (err) {
+        return res.status(500).send({ message: err });
+      } else {
+        const workbook = new ExcelJS.Workbook();
+        workbook.xlsx
+          .readFile(rutaArchivo)
+          .then(async () => {
+            let hojas = workbook.worksheets.map((sheet) => sheet.name),
+              selectedHoja1 = workbook.getWorksheet(hojas[0]),
+              rowsExcel = selectedHoja1.actualRowCount,
+              columnsExcel = selectedHoja1.actualColumnCount;
+
+            let titleColumns = [];
+            for (let i = 2; i <= columnsExcel; i++) {
+              titleColumns.push(selectedHoja1.getRow(1).getCell(i).toString());
+            }
+            let numerosExcel = [];
+            for (let i = 2; i <= rowsExcel; i++) {
+              numerosExcel.push(selectedHoja1.getRow(i).getCell(1).toString());
+            }
+
+            res.render('GECA/detallesExcel', { title: 'Detalle Envio', message: 'Archivo Guardado', nombreArchivo, rutaArchivo, nombreOriginal: excel.name, titleColumns, numerosCount: rowsExcel - 1, numerosExcel });
+          })
+          .catch((error) => console.log(error));
+      }
+    });
+  } catch (error) {
+    console.log(error);
+  }
+});
+router.post('/envioMasivo', (req, res) => {
+  let { rutaExcel, cuerpoMsg, nombreExcel } = req.body;
+  // * Sacar columnas seleccionadas del Mensaje
+  let arr = cuerpoMsg.split('('),
+    columnasInMsg = [];
+  arr.forEach((el) => {
+    if (el.includes(')')) {
+      let nColumn = el.split(')')[0];
+      columnasInMsg.push(nColumn);
+    }
+  });
+
+  const workbook = new ExcelJS.Workbook();
+  workbook.xlsx
+    .readFile(rutaExcel)
+    .then(async () => {
+      let hojas = workbook.worksheets.map((sheet) => sheet.name),
+        selectedHoja1 = workbook.getWorksheet(hojas[0]),
+        rowsExcel = selectedHoja1.actualRowCount,
+        columnsExcel = selectedHoja1.actualColumnCount;
+
+      // * Obtener columnas seleccionadas del excel para con su Indice para colocar en el msg
+      let columnasInExcel = {};
+      for (let i = 2; i <= columnsExcel; i++) {
+        let titleColumn = selectedHoja1.getRow(1).getCell(i).toString();
+        columnasInExcel[titleColumn] = i;
+      }
+
+      // * Generar el msg con las columnas seleccionadas
+      let promises = [];
+      for (let i = 2; i <= rowsExcel; i++) {
+        let numero = selectedHoja1.getRow(i).getCell(1).toString(),
+          cuerpoMsgNew = cuerpoMsg;
+        columnasInMsg.forEach((el) => {
+          let valor = selectedHoja1.getRow(i).getCell(columnasInExcel[el]).toString();
+          cuerpoMsgNew = cuerpoMsgNew.replace(`(${el})`, valor);
+        });
+
+        const data = {
+          OUT_NUMERO_COMUNICA: numero,
+          OUT_CULT_MSGBOT: cuerpoMsgNew,
+          OUT_CDETALLE: 'POR ENVIAR',
+          OUT_CDETALLE1: nombreExcel,
+        };
+
+        console.log(cuerpoMsg);
+        // * Crear inserts por fila
+        const sqlInsert = `INSERT INTO ${keys.database.database}.tbl_outbount SET ?`;
+        promises.push(db.promise().query(sqlInsert, [data]));
+      }
+
+      // * Ejecutar promesas simultaneas previamente creadas en el for - Hola (NOMBRE) su cita sera el (FECHA CITA) a las (HORA CITA)
+      Promise.all(promises).then((resPromiseAll) => {
+        resPromiseAll.forEach((resPromise) => {
+          console.log(resPromise[0].insertId);
+        });
+        req.flash('messageSuccess', `Se han enviado <span style="color: #27ae60; font-weight: bold;">${resPromiseAll.length}</span> mensajes`);
+        res.redirect('/GECA/viewCargue');
+      });
+    })
+    .catch((error) => console.log(error));
 });
 
 module.exports = router;

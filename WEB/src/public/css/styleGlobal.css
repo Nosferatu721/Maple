@@ -16,3 +16,6 @@ table {
 .styleHeadTable {
   background: linear-gradient(45deg, rgba(255, 196, 0, 0.24), rgba(255, 187, 0, 0.342));
 }
+body {
+  font-family: 'Exo 2', sans-serif;
+}

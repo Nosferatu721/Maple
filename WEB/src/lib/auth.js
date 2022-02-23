@@ -12,7 +12,7 @@ module.exports = {
     if (!req.isAuthenticated()) {
       return next();
     } else {
-      return res.redirect("/transferencias");
+      return res.redirect("/redirect");
     }
   },
   error404(req, res) {

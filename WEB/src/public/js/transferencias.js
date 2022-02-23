@@ -139,51 +139,16 @@ document.addEventListener('DOMContentLoaded', () => {
         if (localStorage.getItem('number1') === null) {
           // console.log('@@@@@@@@@ENTRO ASIGNO AL CHAT1');
           postData('/GECA/asignacionSelect').then(async (res) => {
-            console.log(res);
-            res.result.forEach(async (mensaje) => {
-              infoChatBotInit =
-                `
-                Nombre: ${mensaje.GES_CDETALLE1} ` +
-                '<br>' +
-                `
-                Parentesco: ${mensaje.GES_CDETALLE2} ` +
-                '<br>' +
-                `
-                Tipo Documento: ${mensaje.GES_CDETALLE3} ` +
-                '<br>' +
-                `
-                Nombre Confirmado: ${mensaje.GES_CDETALLE4} ` +
-                '<br>' +
-                `
-                Numeros de Contacto: ${mensaje.GES_CDETALLE5} ` +
-                '<br>' +
-                `
-                ¿Contacto con alguien con Covid? (Ultimos 14 dias): ${mensaje.GES_CDETALLE6} ` +
-                '<br>' +
-                `
-                ¿Ha tenido alguno de los siguientes sintomas? (Ultimos 14 dias): ${mensaje.GES_CDETALLE7} ` +
-                '<br>' +
-                `
-                Ciudad: ${mensaje.GES_CDETALLE8} ` +
-                '<br>' +
-                `
-                EPS: ${mensaje.GES_CDETALLE9} ` +
-                '<br>' +
-                `
-                Sede: ${mensaje.GES_CDETALLE10} ` +
-                '<br>' +
-                `
-                Solicitud Cliente: ${mensaje.GES_CDETALLE11} ` +
-                '<br>' +
-                `
-              `;
-              let idArboll = mensaje.PKGES_CODIGO;
-              numberRecepcion = mensaje.GES_NUMERO_COMUNICA;
+            if (res.result.length === 0) return;
+            if (res.result[0].GES_CMSGOUTBOUND === 'Si') {
+              let idArboll = res.result[0].PKGES_CODIGO;
+              numberRecepcion = res.result[0].GES_NUMERO_COMUNICA;
               //let ultMSJ = mensaje.GES_CDETALLE;
               let mensajeBienvenida = 'Tiene un nuevo cliente en este chat';
-              console.log('************************ESTE ES EL MENSAJE', mensaje);
+              // console.log('************************ESTE ES EL MENSAJE', mensaje);
               idArbol = idArboll;
-              let msjConcatenadoo = mensajeBienvenida + '<br>' + infoChatBotInit;
+              let msjConcatenadoo = mensajeBienvenida + '<br>' + '<b>Este es un chat Outbound</b> - Cargue: ' + res.outbound.OUT_CDETALLE1 +'<br>';
+              msjConcatenadoo = msjConcatenadoo + '<b>Mensaje Masivo Enviado:</b><br><i>' + res.outbound.OUT_CULT_MSGBOT + '</i>';
 
               asignacion(idPer, idArbol);
               //    console.log('##################este es el', numberRecepcion);
@@ -192,119 +157,213 @@ document.addEventListener('DOMContentLoaded', () => {
               localStorage.setItem('Msj1', msjConcatenadoo);
               localStorage.setItem('arbol1', idArboll);
               Toast.fire({ icon: 'info', title: 'Tiene un nuevo usuario en el chat 1' });
-            });
+            } else {
+              res.result.forEach(async (mensaje) => {
+                infoChatBotInit =
+                  `
+                Nombre: ${mensaje.GES_CDETALLE1} ` +
+                  '<br>' +
+                  `
+                Parentesco: ${mensaje.GES_CDETALLE2} ` +
+                  '<br>' +
+                  `
+                Tipo Documento: ${mensaje.GES_CDETALLE3} ` +
+                  '<br>' +
+                  `
+                Nombre Confirmado: ${mensaje.GES_CDETALLE4} ` +
+                  '<br>' +
+                  `
+                Numeros de Contacto: ${mensaje.GES_CDETALLE5} ` +
+                  '<br>' +
+                  `
+                ¿Contacto con alguien con Covid? (Ultimos 14 dias): ${mensaje.GES_CDETALLE6} ` +
+                  '<br>' +
+                  `
+                ¿Ha tenido alguno de los siguientes sintomas? (Ultimos 14 dias): ${mensaje.GES_CDETALLE7} ` +
+                  '<br>' +
+                  `
+                Ciudad: ${mensaje.GES_CDETALLE8} ` +
+                  '<br>' +
+                  `
+                EPS: ${mensaje.GES_CDETALLE9} ` +
+                  '<br>' +
+                  `
+                Sede: ${mensaje.GES_CDETALLE10} ` +
+                  '<br>' +
+                  `
+                Solicitud Cliente: ${mensaje.GES_CDETALLE11} ` +
+                  '<br>' +
+                  `
+              `;
+                let idArboll = mensaje.PKGES_CODIGO;
+                numberRecepcion = mensaje.GES_NUMERO_COMUNICA;
+                //let ultMSJ = mensaje.GES_CDETALLE;
+                let mensajeBienvenida = 'Tiene un nuevo cliente en este chat';
+                // console.log('************************ESTE ES EL MENSAJE', mensaje);
+                idArbol = idArboll;
+                let msjConcatenadoo = mensajeBienvenida + '<br>' + infoChatBotInit;
+
+                asignacion(idPer, idArbol);
+                //    console.log('##################este es el', numberRecepcion);
+
+                localStorage.setItem('number1', numberRecepcion);
+                localStorage.setItem('Msj1', msjConcatenadoo);
+                localStorage.setItem('arbol1', idArboll);
+                Toast.fire({ icon: 'info', title: 'Tiene un nuevo usuario en el chat 1' });
+              });
+            }
           });
 
           //        numberRecepcion=0;
         } else if (localStorage.getItem('number2') === null) {
           postData('/GECA/asignacionSelect').then(async (res) => {
-            res.result.forEach((mensaje) => {
-              infoChatBotInit =
-                `
-                Nombre: ${mensaje.GES_CDETALLE1} ` +
-                '<br>' +
-                `
-                Parentesco: ${mensaje.GES_CDETALLE2} ` +
-                '<br>' +
-                `
-                Tipo Documento: ${mensaje.GES_CDETALLE3} ` +
-                '<br>' +
-                `
-                Nombre Confirmado: ${mensaje.GES_CDETALLE4} ` +
-                '<br>' +
-                `
-                Numeros de Contacto: ${mensaje.GES_CDETALLE5} ` +
-                '<br>' +
-                `
-                ¿Contacto con alguien con Covid? (Ultimos 14 dias): ${mensaje.GES_CDETALLE6} ` +
-                '<br>' +
-                `
-                ¿Ha tenido alguno de los siguientes sintomas? (Ultimos 14 dias): ${mensaje.GES_CDETALLE7} ` +
-                '<br>' +
-                `
-                Ciudad: ${mensaje.GES_CDETALLE8} ` +
-                '<br>' +
-                `
-                EPS: ${mensaje.GES_CDETALLE9} ` +
-                '<br>' +
-                `
-                Sede: ${mensaje.GES_CDETALLE10} ` +
-                '<br>' +
-                `
-                Solicitud Cliente: ${mensaje.GES_CDETALLE11} ` +
-                '<br>' +
-                `
-              `;
-              let idArboll = mensaje.PKGES_CODIGO;
-              numberRecepcion = mensaje.GES_NUMERO_COMUNICA;
+            if (res.result.length === 0) return;
+            if (res.result[0].GES_CMSGOUTBOUND === 'Si') {
+              let idArboll = res.result[0].PKGES_CODIGO;
+              numberRecepcion = res.result[0].GES_NUMERO_COMUNICA;
               //let ultMSJ = mensaje.GES_CDETALLE;
               let mensajeBienvenida = 'Tiene un nuevo cliente en este chat';
-              idArbol2 = idArboll;
-              let msjConcatenadoo = mensajeBienvenida + '<br>' + infoChatBotInit;
+              // console.log('************************ESTE ES EL MENSAJE', mensaje);
+              idArbol = idArboll;
+              let msjConcatenadoo = mensajeBienvenida + '<br>' + '<b>Este es un chat Outbound</b><br>';
+              msjConcatenadoo = msjConcatenadoo + '<b>Mensaje Masivo Enviado:</b><br><i>' + res.outbound.OUT_CULT_MSGBOT + '</i>';
 
-              asignacion(idPer, idArbol2);
-              //    console.log('##################este es el numero', numberRecepcion);
-              localStorage.setItem('arbol2', idArboll);
-              localStorage.setItem('number2', numberRecepcion);
-              localStorage.setItem('Msj2', msjConcatenadoo);
-              Toast.fire({ icon: 'info', title: 'Tiene un nuevo usuario en el chat 2' });
-            });
+              asignacion(idPer, idArbol);
+              //    console.log('##################este es el', numberRecepcion);
+
+              localStorage.setItem('number1', numberRecepcion);
+              localStorage.setItem('Msj1', msjConcatenadoo);
+              localStorage.setItem('arbol1', idArboll);
+              Toast.fire({ icon: 'info', title: 'Tiene un nuevo usuario en el chat 1' });
+            } else {
+              res.result.forEach((mensaje) => {
+                infoChatBotInit =
+                  `
+                Nombre: ${mensaje.GES_CDETALLE1} ` +
+                  '<br>' +
+                  `
+                Parentesco: ${mensaje.GES_CDETALLE2} ` +
+                  '<br>' +
+                  `
+                Tipo Documento: ${mensaje.GES_CDETALLE3} ` +
+                  '<br>' +
+                  `
+                Nombre Confirmado: ${mensaje.GES_CDETALLE4} ` +
+                  '<br>' +
+                  `
+                Numeros de Contacto: ${mensaje.GES_CDETALLE5} ` +
+                  '<br>' +
+                  `
+                ¿Contacto con alguien con Covid? (Ultimos 14 dias): ${mensaje.GES_CDETALLE6} ` +
+                  '<br>' +
+                  `
+                ¿Ha tenido alguno de los siguientes sintomas? (Ultimos 14 dias): ${mensaje.GES_CDETALLE7} ` +
+                  '<br>' +
+                  `
+                Ciudad: ${mensaje.GES_CDETALLE8} ` +
+                  '<br>' +
+                  `
+                EPS: ${mensaje.GES_CDETALLE9} ` +
+                  '<br>' +
+                  `
+                Sede: ${mensaje.GES_CDETALLE10} ` +
+                  '<br>' +
+                  `
+                Solicitud Cliente: ${mensaje.GES_CDETALLE11} ` +
+                  '<br>' +
+                  `
+              `;
+                let idArboll = mensaje.PKGES_CODIGO;
+                numberRecepcion = mensaje.GES_NUMERO_COMUNICA;
+                //let ultMSJ = mensaje.GES_CDETALLE;
+                let mensajeBienvenida = 'Tiene un nuevo cliente en este chat';
+                idArbol2 = idArboll;
+                let msjConcatenadoo = mensajeBienvenida + '<br>' + infoChatBotInit;
+
+                asignacion(idPer, idArbol2);
+                //    console.log('##################este es el numero', numberRecepcion);
+                localStorage.setItem('arbol2', idArboll);
+                localStorage.setItem('number2', numberRecepcion);
+                localStorage.setItem('Msj2', msjConcatenadoo);
+                Toast.fire({ icon: 'info', title: 'Tiene un nuevo usuario en el chat 2' });
+              });
+            }
           });
         } else if (localStorage.getItem('number3') === null) {
           postData('/GECA/asignacionSelect').then(async (res) => {
-            res.result.forEach((mensaje) => {
-              infoChatBotInit =
-                `
-                Nombre: ${mensaje.GES_CDETALLE1} ` +
-                '<br>' +
-                `
-                Parentesco: ${mensaje.GES_CDETALLE2} ` +
-                '<br>' +
-                `
-                Tipo Documento: ${mensaje.GES_CDETALLE3} ` +
-                '<br>' +
-                `
-                Nombre Confirmado: ${mensaje.GES_CDETALLE4} ` +
-                '<br>' +
-                `
-                Numeros de Contacto: ${mensaje.GES_CDETALLE5} ` +
-                '<br>' +
-                `
-                ¿Contacto con alguien con Covid? (Ultimos 14 dias): ${mensaje.GES_CDETALLE6} ` +
-                '<br>' +
-                `
-                ¿Ha tenido alguno de los siguientes sintomas? (Ultimos 14 dias): ${mensaje.GES_CDETALLE7} ` +
-                '<br>' +
-                `
-                Ciudad: ${mensaje.GES_CDETALLE8} ` +
-                '<br>' +
-                `
-                EPS: ${mensaje.GES_CDETALLE9} ` +
-                '<br>' +
-                `
-                Sede: ${mensaje.GES_CDETALLE10} ` +
-                '<br>' +
-                `
-                Solicitud Cliente: ${mensaje.GES_CDETALLE11} ` +
-                '<br>' +
-                `
-              `;
-              let mensajeBienvenida = 'Tiene un nuevo cliente en este chat';
-              let idArboll = mensaje.PKGES_CODIGO;
-              numberRecepcion = mensaje.GES_NUMERO_COMUNICA;
+            if (res.result.length === 0) return;
+            if (res.result[0].GES_CMSGOUTBOUND === 'Si') {
+              let idArboll = res.result[0].PKGES_CODIGO;
+              numberRecepcion = res.result[0].GES_NUMERO_COMUNICA;
               //let ultMSJ = mensaje.GES_CDETALLE;
+              let mensajeBienvenida = 'Tiene un nuevo cliente en este chat';
+              // console.log('************************ESTE ES EL MENSAJE', mensaje);
+              idArbol = idArboll;
+              let msjConcatenadoo = mensajeBienvenida + '<br>' + '<b>Este es un chat Outbound</b><br>';
+              msjConcatenadoo = msjConcatenadoo + '<b>Mensaje Masivo Enviado:</b><br><i>' + res.outbound.OUT_CULT_MSGBOT + '</i>';
 
-              idArbol3 = idArboll;
-              let msjConcatenadoo = mensajeBienvenida + '<br>' + infoChatBotInit;
+              asignacion(idPer, idArbol);
+              //    console.log('##################este es el', numberRecepcion);
 
-              asignacion(idPer, idArbol3);
-              //   console.log('##################este es el numero', numberRecepcion);
+              localStorage.setItem('number1', numberRecepcion);
+              localStorage.setItem('Msj1', msjConcatenadoo);
+              localStorage.setItem('arbol1', idArboll);
+              Toast.fire({ icon: 'info', title: 'Tiene un nuevo usuario en el chat 1' });
+            } else {
+              res.result.forEach((mensaje) => {
+                infoChatBotInit =
+                  `
+                Nombre: ${mensaje.GES_CDETALLE1} ` +
+                  '<br>' +
+                  `
+                Parentesco: ${mensaje.GES_CDETALLE2} ` +
+                  '<br>' +
+                  `
+                Tipo Documento: ${mensaje.GES_CDETALLE3} ` +
+                  '<br>' +
+                  `
+                Nombre Confirmado: ${mensaje.GES_CDETALLE4} ` +
+                  '<br>' +
+                  `
+                Numeros de Contacto: ${mensaje.GES_CDETALLE5} ` +
+                  '<br>' +
+                  `
+                ¿Contacto con alguien con Covid? (Ultimos 14 dias): ${mensaje.GES_CDETALLE6} ` +
+                  '<br>' +
+                  `
+                ¿Ha tenido alguno de los siguientes sintomas? (Ultimos 14 dias): ${mensaje.GES_CDETALLE7} ` +
+                  '<br>' +
+                  `
+                Ciudad: ${mensaje.GES_CDETALLE8} ` +
+                  '<br>' +
+                  `
+                EPS: ${mensaje.GES_CDETALLE9} ` +
+                  '<br>' +
+                  `
+                Sede: ${mensaje.GES_CDETALLE10} ` +
+                  '<br>' +
+                  `
+                Solicitud Cliente: ${mensaje.GES_CDETALLE11} ` +
+                  '<br>' +
+                  `
+              `;
+                let mensajeBienvenida = 'Tiene un nuevo cliente en este chat';
+                let idArboll = mensaje.PKGES_CODIGO;
+                numberRecepcion = mensaje.GES_NUMERO_COMUNICA;
+                //let ultMSJ = mensaje.GES_CDETALLE;
 
-              localStorage.setItem('number3', numberRecepcion);
-              localStorage.setItem('Msj3', msjConcatenadoo);
-              localStorage.setItem('arbol3', idArboll);
-              Toast.fire({ icon: 'info', title: 'Tiene un nuevo usuario en el chat 3' });
-            });
+                idArbol3 = idArboll;
+                let msjConcatenadoo = mensajeBienvenida + '<br>' + infoChatBotInit;
+
+                asignacion(idPer, idArbol3);
+                //   console.log('##################este es el numero', numberRecepcion);
+
+                localStorage.setItem('number3', numberRecepcion);
+                localStorage.setItem('Msj3', msjConcatenadoo);
+                localStorage.setItem('arbol3', idArboll);
+                Toast.fire({ icon: 'info', title: 'Tiene un nuevo usuario en el chat 3' });
+              });
+            }
           });
         } else {
           //console.log("##################NUMBER1 QUEDO COMO",number1);

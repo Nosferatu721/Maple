@@ -11,3 +11,7 @@ Handlebars.registerHelper("isAdministradorAgente", (value) => {
 Handlebars.registerHelper('isEnviado', (value) => {
   return value === 'ENVIADO';
 });
+
+Handlebars.registerHelper('isOutbound', (value) => {
+  return value !== null;
+});

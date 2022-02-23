@@ -9,15 +9,21 @@ password = ''
 
 domain = Class2.DeCrypt('41514E32416D706C41784C334147706A41775A324577706D5A7848325A6D4D544178443D')
 module.exports = {
+  // database: {
+  //   host: '172.70.7.70',
+  //   user: 'cos_crm',
+  //   password: 'gestiongeneralcos:2020',
+  //   database: 'dbp_whatsappmapple',
+  // },
   database: {
-    host: '172.70.7.70',
-    user: 'cos_crm',
-    password: 'gestiongeneralcos:2020',
+    host: '127.0.0.1',
+    user: 'root',
+    password: '',
     database: 'dbp_whatsappmapple',
   },
   // Variables de configuracion de active directory
   config: {
-    url: url,
+    url: 'LDAP://172.70.7.11:389',
     baseDN: baseDN,
     username: username,
     password: password,
