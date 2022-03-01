@@ -68,11 +68,11 @@
               {{#each rowsSelectMen}}
                 {{#if (isEnviado this.MEN_ESTADO_MENSAJE)}}
                   <tr>
-                    <td style='float: right; padding: 1rem'>{{this.MEN_TEXTO}}</td>
+                    <td style='float: right; padding: 1rem; text-align: right'>{{this.MEN_TEXTO}}</td>
                   </tr>
                 {{else}}
                   <tr>
-                    <td style='float: left; padding: 1rem'>{{this.MEN_TEXTO}}</td>
+                    <td style='float: left; padding: 1rem; text-align: left'>{{this.MEN_TEXTO}}</td>
                   </tr>
                 {{/if}}
               {{/each}}

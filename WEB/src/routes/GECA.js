@@ -325,7 +325,20 @@ router.post('/envioMasivo', (req, res) => {
           cuerpoMsgNew = cuerpoMsg;
         columnasInMsg.forEach((el) => {
           let valor = selectedHoja1.getRow(i).getCell(columnasInExcel[el]).toString();
-          cuerpoMsgNew = cuerpoMsgNew.replace(`(${el})`, valor);
+          // * Validar si es Fecha o Hora
+          if (valor.includes('GMT')) {
+            // * SI es Fecha
+            if (valor.split(' ')[4].split(':')[0] === '00') {
+              let fechaAll = new Date(Date.now()),
+                fecha = fechaAll.toJSON().slice(0, 10);
+              cuerpoMsgNew = cuerpoMsgNew.replace(`(${el})`, fecha);
+            } else {
+              // * SI es Hora
+              cuerpoMsgNew = cuerpoMsgNew.replace(`(${el})`, valor.split(' ')[4]);
+            }
+          } else {
+            cuerpoMsgNew = cuerpoMsgNew.replace(`(${el})`, valor);
+          }
         });
 
         const data = {
@@ -335,7 +348,7 @@ router.post('/envioMasivo', (req, res) => {
           OUT_CDETALLE1: nombreExcel,
         };
 
-        console.log(cuerpoMsg);
+        console.log(cuerpoMsgNew);
         // * Crear inserts por fila
         const sqlInsert = `INSERT INTO ${keys.database.database}.tbl_outbount SET ?`;
         promises.push(db.promise().query(sqlInsert, [data]));
