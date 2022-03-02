@@ -48,7 +48,7 @@ class Permiso {
 */
 class Gestion {
   //inserta en gestión el nuevo caso
-  async insert_gestion(numero, msg, estado, outboundID = null) {
+  async insert_gestion(numero, msg, estado, outboundID = '0') {
     let comprobar = false;
     let kind = 'INBOUND';
     const sql = `INSERT INTO ${DB}.tbl_gestion (GES_NUMERO_COMUNICA, GES_CULT_MSGBOT,GES_CDETADICIONAL, GES_CESTADO, GES_FK_OUTBOUND) VALUES ('${numero}', '${msg}', '${kind}','${estado}', '${outboundID}')`;
@@ -113,7 +113,8 @@ class Gestion {
 
   async cerrarOutbound(id, respuesta) {
     let comprobar = false;
-    const sql = `UPDATE ${DB}.tbl_gestion SET GES_CULT_MSGBOT = 'MSG_CLOSE', GES_CMSGOUTBOUND = '${respuesta}' AND GES_CESTADO = 'Inactivo' WHERE PKGES_CODIGO = '${id}' AND GES_CESTADO = 'Activo'`;
+    const sql = `UPDATE ${DB}.tbl_gestion SET GES_CULT_MSGBOT = 'MSG_CLOSE', GES_CMSGOUTBOUND = '${respuesta}', GES_CESTADO = 'Inactivo' WHERE PKGES_CODIGO = '${id}' AND GES_CESTADO = 'Activo'`;
+    console.log(sql);
     await connDB
       .promise()
       .query(sql)

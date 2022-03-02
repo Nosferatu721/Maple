@@ -223,7 +223,7 @@ clientWP.on('message', async (msg) => {
     //   clientWP.sendMessage(msg.from, 'Por favor permitanos un momento, un asesor en unos minutos lo atendera, gracias ');
     // }
 
-    // ! VALIDA TERMINO ARBOL
+    // ! VALIDA TERMINO ARBOL OUT
     else if (resultadosss[0].GES_CULT_MSGBOT == 'MSG_OUTBOUND' && msg.type === 'list_response') {
       let idArbol = await Gestion.select_id_arbol_by_number(numero_chat);
       console.log('LLEGA EL ARBOL ', idArbol, resultadosss[0].PKGES_CODIGO);
@@ -349,7 +349,7 @@ async function eliminarExesoChats() {
 const envioMasivo = async () => {
   const mensajeMasivo = async () => {
     try {
-      let chatPorEnviar = await Outbound.porEnviar();
+      let chatPorEnviar = await Outbound.porEnviar(); 
       // * Validar si hay un mensaje Outbound por enviar
       if (chatPorEnviar) {
         // * Enviar Mensaje Outbound
@@ -362,6 +362,7 @@ const envioMasivo = async () => {
           // * Despues de enviar se actualiza el registro y se registra en tabla tbl_gestion
           await Outbound.actualizar(chatPorEnviar.PKOUT_CODIGO);
           await Gestion.insert_gestion(chatPorEnviar.OUT_NUMERO_COMUNICA, 'MSG_OUTBOUND', 'Activo', chatPorEnviar.PKOUT_CODIGO);
+          console.log('Envio Masivo', chatPorEnviar.OUT_NUMERO_COMUNICA);
         });
       }
 
