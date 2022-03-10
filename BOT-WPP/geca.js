@@ -82,16 +82,7 @@ clientWP.on('message', async (msg) => {
         // Horario de atencion es de Lunes a Viernes de 7am a 7 pm y los sabados de 7am a 1pm
         // ¿Con quién tengo el gusto de hablar? (Por favor escriba su nombre) ⬇️`;
 
-        const options = [
-          { title: 'INFORMACIÓN DE CONTACTO' },
-          { title: 'RECOMENDACIONES GENERALES' },
-          { title: 'TIPOS Y PREPARACIONES PARA EXÁMENES' },
-          { title: 'DEBERES Y DERECHOS' },
-          { title: 'MANEJO DE MASCARAS Y EQUIPO' },
-          { title: 'RECOMENDACIONES DEL EQUIPO DE SALUD' },
-          { title: 'PREGUNTAS FRECUENTES' },
-          { title: 'PASO A AGENTE' },
-        ];
+        const options = [{ title: 'INFORMACIÓN DE CONTACTO' }, { title: 'RECOMENDACIONES GENERALES' }, { title: 'TIPOS Y PREPARACIONES PARA EXÁMENES' }, { title: 'DEBERES Y DERECHOS' }, { title: 'MANEJO DE MASCARAS Y EQUIPO' }, { title: 'RECOMENDACIONES DEL EQUIPO DE SALUD' }, { title: 'PREGUNTAS FRECUENTES' }, { title: 'PASO A AGENTE' }];
         const menu = [{ title: 'Bienvenido al ChatBot de Maple Respiratory. Este es el menú principal:', rows: options }];
         const lista = new List('Bienvenido al ChatBot de Maple Respiratory. Este es el menú principal:', 'Seleccione una opción', menu);
         clientWP.sendMessage(msg.from, lista);
@@ -138,6 +129,7 @@ clientWP.on('message', async (msg) => {
         );
         await Gestion.deleteChat(msg.from.toString().replace('@c.us', ''));
       }
+
       // *** RECOMENDACIONES GENERALES
       if (msg.body === 'RECOMENDACIONES GENERALES') {
         const options = [{ title: 'Citas generales' }, { title: 'Entrega de equipo' }, { title: 'Entrega de resultados de Diagnostico' }, { title: 'Copagos y cuotas moderadoras' }];
@@ -154,6 +146,185 @@ clientWP.on('message', async (msg) => {
 - Debe presentarse 15 minutos antes de la cita asignada.
 - Recuerde que su hora de llegada debe ser puntual de lo contrario perderá su cita y se le presenta algún inconveniente antes de la cita o no puede asistir por favor comuníquese al: Bogotá: 4863232, Móvil: 3208899553 Nacional: 018000 186660`
         );
+        await Gestion.deleteChat(msg.from.toString().replace('@c.us', ''));
+      }
+      if (msg.body === 'Entrega de equipo') {
+        clientWP.sendMessage(
+          msg.from,
+          `- Traer cédula original, 2 fotocopias de la cedula tamaño normal fotocopia de la última polisomnografía basal y de la titulación de cpap
+- Puede asistir a la cita con un acompañante.
+- Debe presentarse 15 minutos antes de la cita asignada.
+- Recuerde que su hora de llegada debe ser puntual de lo contrario perderá su cita y se le presenta algún inconveniente antes de la cita o no puede asistir por favor comuníquese al: Bogotá: 4863232, Móvil: 3208899553 Nacional: 018000 186660`
+        );
+        await Gestion.deleteChat(msg.from.toString().replace('@c.us', ''));
+      }
+      if (msg.body === 'Entrega de resultados de Diagnostico') {
+        clientWP.sendMessage(
+          msg.from,
+          `- El resultado de sus exámenes estará disponible 15 días hábiles posterior a la toma del mismo
+- SI en este tiempo no ha recibido respuesta, puede comunicarse a las líneas de servicio al cliente para consultar es estado de su resultado`
+        );
+        await Gestion.deleteChat(msg.from.toString().replace('@c.us', ''));
+      }
+      if (msg.body === 'Copagos y cuotas moderadoras') {
+        clientWP.sendMessage(msg.from, `De acuerdo con lo establecido por el Gobierno Nacional, MAPLE RESPIRATORY, da a conocer los valores que cada cotizante y beneficiario, deberán cancelar, al momento de solicitar los servicios de nuestra empresa. Estos valores son establecidos por: el Consejo Nacional en Seguridad en Salud y la Comisión de Regulación en Salud`);
+        await Gestion.deleteChat(msg.from.toString().replace('@c.us', ''));
+      }
+
+      // *** TIPOS Y PREPARACIONES PARA EXÁMENEN
+      if (msg.body === 'TIPOS Y PREPARACIONES PARA EXÁMENES') {
+        const options = [{ title: 'POLISOMNOGRAFÍA BASAL' }, { title: 'POLISOMNOGRAFÍA DE TITULACIÓN' }, { title: 'POLIGRAFÍA RESPIRATORIA' }, { title: 'AUTOTITULACIÓN' }];
+        const menu = [{ title: 'Por favor seleccione una opción de esta lista', rows: options }];
+        const lista = new List('Por favor seleccione una opción de esta lista', 'Seleccione una opción', menu);
+        clientWP.sendMessage(msg.from, lista);
+      }
+      if (msg.body === 'POLISOMNOGRAFÍA BASAL') {
+        clientWP.sendMessage(
+          msg.from,
+          `Estudio diagnóstico electrofisiológico que se utiliza para identificar diversas patologías durante el sueño. El paciente debe asistir a las instalaciones de la IPS durante toda la noche para su realización.
+* Preparacion para el examen:*
+• Lleve sus documentos de identificación y orden médica para el estudio
+• Evite las bebidas como el chocolate, el té, el café.
+• Evite fumar
+• Lleve el cabello limpio y seco, no use ningún producto químico como el gel o laca.
+• Lleve pijama de dos piezas.
+• Si toma medicamentos para otras enfermedades tómelos como lo hace habitualmente.
+• Si toma medicamentos para dormir llévelos junto con su fórmula médica.
+• Si tiene estudios previos llévelos al estudio.
+• Todos los pacientes mayores de 75 años deben asistir con acompañante, de acuerdo a su condición, el técnico define si es necesario o no que se quede durante la realización del estudio. (No olvide revisar la indicación de acompañante en la orden entregada por el medico el día de la consulta)`
+        );
+        await Gestion.deleteChat(msg.from.toString().replace('@c.us', ''));
+      }
+      if (msg.body === 'POLISOMNOGRAFÍA DE TITULACIÓN') {
+        clientWP.sendMessage(
+          msg.from,
+          `Estudio electrofisiológico que se realiza luego de un diagnóstico positivo para Síndrome de apnea obstructiva de sueño, con el objetivo de definir una presión de aire como tratamiento que permita manejar la enfermedad a través de una máscara adaptada para cada paciente.  Para este estudio el paciente debe asistir a dormir durante toda la noche en nuestras instalaciones.
+* Preparacion para el examen:*
+• Lleve sus documentos de identificación y orden médica para el estudio
+• Evite las bebidas como el chocolate, el té, el café.
+• Evite fumar
+• Lleve el cabello limpio y seco, no use ningún producto químico como el gel o laca.
+• Lleve pijama de dos piezas.
+• Si toma medicamentos para otras enfermedades tómelos como lo hace habitualmente.
+• Si toma medicamentos para dormir llévelos junto con su fórmula médica.
+• Si tiene estudios previos llévelos al estudio.
+• Todos los pacientes mayores de 75 años deben asistir con acompañante, de acuerdo a su condición, el técnico define si es necesario o no que se quede durante la realización del estudio. (No olvide revisar la indicación de acompañante en la orden entregada por el medico el día de la consulta)`
+        );
+        await Gestion.deleteChat(msg.from.toString().replace('@c.us', ''));
+      }
+      if (msg.body === 'POLIGRAFÍA RESPIRATORIA') {
+        clientWP.sendMessage(
+          msg.from,
+          `Estudio diagnóstico electrofisiológico ambulatorio, que se utiliza para identificar trastornos respiratorios durante el sueño. En la consulta de valoración inicial el médico realizará la entrega de un equipo portátil que debe utilizar durante toda la noche mientras duerme en su casa. Este equipo debe ser devuelto en la sede de la IPS al día siguiente en horas de la mañana para obtener una lectura eficaz del estudio realizado.
+Si usted es definido en la consulta de valoración inicial por medicina como apto para la realización de un estudio de poligrafía, se recomienda seguir las instrucciones de colocación y manejo dadas por el médico en el proceso de entrega para obtener un estudio óptimo.`
+        );
+        await Gestion.deleteChat(msg.from.toString().replace('@c.us', ''));
+      }
+      if (msg.body === 'AUTOTITULACIÓN') {
+        clientWP.sendMessage(
+          msg.from,
+          `Estudio que permite definir la presión de tratamiento óptima para corregir los eventos obstructivos del paciente con Síndrome de apnea obstructiva de sueño. Se realizará la entrega de un equipo y una máscara, los cuales debe utilizar en su casa durante 5 noches mientras duerme, y asistir el día siguiente a las instalaciones de la IPS a devolver el equipo suministrado para determinar el resultado del estudio. Para este estudio se recomienda dormir todos los días a la misma hora, sin tener distracciones como televisión, celulares u otro dispositivo que le impida conciliar el sueño rápidamente.`
+        );
+        await Gestion.deleteChat(msg.from.toString().replace('@c.us', ''));
+      }
+
+      // *** DEBERES Y DERECHOS
+      if (msg.body === 'DEBERES Y DERECHOS') {
+        const options = [{ title: 'El paciente tiene el deber de:' }, { title: 'El paciente tiene derecho a:' }];
+        const menu = [{ title: 'Por favor seleccione una opción de esta lista', rows: options }];
+        const lista = new List('Por favor seleccione una opción de esta lista', 'Seleccione una opción', menu);
+        clientWP.sendMessage(msg.from, lista);
+      }
+      if (msg.body === 'El paciente tiene el deber de:') {
+        clientWP.sendMessage(
+          msg.from,
+          `1. Conocer políticas administrativas de su institución prestadora de salud Maple Respiratory Colombia para la prestación de los servicios.
+2. Precisar antes de asistir a la prestación de servicio de salud que todos los trámites, requerimientos, autorizaciones y vigencias necesarias según la entidad a la que se encuentre afiliado, estén en orden para que Maple Respiratory Colombia le pueda prestar el servicio a satisfacción.
+3. Colaborar con el cumplimiento de las normas, requerimientos e instrucciones administrativas establecidas por las autoridades de salud de Maple Respiratory Colombia.
+4. Solicitar información necesaria que se requiera sobre las normas y funcionamiento para la prestación del servicio de salud en Maple Respiratory Colombia.
+5. Responsabilizarse de los tratamientos (transcripción de tratamientos, autorización de procedimientos, consultas e incapacidad y/o indicación brindada por el terapeuta o especialista) ante Maple Respiratory Colombia.
+6. Tratar con máximo respeto a todo el personal de Maple Respiratory Colombia, a los demás pacientes y a los acompañantes.
+7. Conocer los canales de comunicación e información de Maple Respiratory Colombia, a través de la coordinación de atención al usuario, sobre preguntas, sugerencias, reclamaciones y quejas relacionadas con la prestación de sus servicios.
+8. Firmar su historia clínica en caso de no aceptación, al método de tratamiento, sugerido por el médico tratante.
+9. Velar por la confidencialidad de su historia clínica en cumplimiento de la Resolución 1995 / 1999 (custodia conservación de la historia clínica)`
+        );
+        await Gestion.deleteChat(msg.from.toString().replace('@c.us', ''));
+      }
+      if (msg.body === 'El paciente tiene derecho a:') {
+        clientWP.sendMessage(
+          msg.from,
+          `1. Ser orientado e informado de las políticas administrativas de su institución prestadora de salud Maple Respiratory Colombia para la prestación de su servicio.
+2. El respeto de su personalidad, dignidad humana e intimidad, sin que sea discriminado por razones de tipo racial, social, económica, religioso o política.
+3. La confidencialidad de toda información registrada en su historia clínica, diagnóstico y tratamiento, salvo por exigencias legales que lo hagan imprescindible.
+4. Recibir información completa, continua de todo lo relativo a su enfermedad, incluyendo diagnóstico, alternativas del tratamiento, riesgos y pronósticos, que será facilitada en un lenguaje comprensible.  En caso de  que el paciente tenga algún tipo de déficit cognitivo para recibir la información, este deberá proporcionarse a los familiares o persona legalmente responsable.
+5. A la libre decisión entre diferentes opciones que le presente el médico tratante o terapeuta, siendo preciso su consentimiento expreso previo a cualquier actuación; excepto en los siguientes casos: cuando el tratamiento sea una urgencia o no permita demoras, cuando el no seguir el tratamiento suponga un riesgo para la salud pública, cuando no esté capacitado para tomar decisiones, en cuyo caso el derecho corresponderá a sus familiares y/o persona legalmente responsable.
+6. A negarse al tratamiento excepto en las circunstancias descritas en el punto anterior.  Solicitando su salida voluntaria.
+7. A que le asignen una terapeuta cuyo nombre debe conocer y que sea un interlocutor válido con el equipo asistencial. En caso de ausencia y/o inconformidad otro terapeuta del equipo asumirá la atención.
+8. A que su historia clínica esté todo el proceso de su enfermedad y quede consignado según la normatividad vigente. 
+9. A que no se realicen investigaciones, experimentos o ensayos clínicos sin una información clara y precisa de los métodos, riesgos y fines.  Será imprescindible la autorización por escrito del paciente (consentimiento informado).
+10. Al correcto funcionamiento de los servicios asistenciales y condiciones adecuadas de higiene, seguridad y respeto a su intimidad e integridad.
+11. A conocer los mecanismos formales para presentar sugerencias, quejas o reclamos y a recibir una respuesta por escrito, a través de las vías para comunicarse con la administración de Maple Respiratory Colombia.
+12. A que Maple Respiratory Colombia proporcione una asistencia correcta con personal calificado.  Un aprovechamiento máximo de las terapeutas disponibles, una asistencia con los mínimos riesgos, dolores y molestias psíquicas y físicas.`
+        );
+        await Gestion.deleteChat(msg.from.toString().replace('@c.us', ''));
+      }
+
+      // *** MANEJO DE MASCARAS Y EQUIPO
+      if (msg.body === 'MANEJO DE MASCARAS Y EQUIPO') {
+        clientWP.sendMessage(msg.from, `*Falta definir texto*`);
+        await Gestion.deleteChat(msg.from.toString().replace('@c.us', ''));
+      }
+
+      // *** DEBERES Y DERECHOS
+      if (msg.body === 'RECOMENDACIONES DEL EQUIPO DE SALUD') {
+        const options = [{ title: 'Recomendación de su Nutricionista' }, { title: 'Recomendaciones de su Psicólogo' }, { title: 'Recomendaciones de su Terapeuta' }, { title: 'Recomendaciones de su Medico Experto' }];
+        const menu = [{ title: 'Por favor seleccione una opción de esta lista', rows: options }];
+        const lista = new List('Por favor seleccione una opción de esta lista', 'Seleccione una opción', menu);
+        clientWP.sendMessage(msg.from, lista);
+      }
+      if (msg.body === 'Recomendación de su Nutricionista') {
+        clientWP.sendMessage(
+          msg.from,
+          `1. Fraccionar la alimentación en 5 tiempos de comida, manejando horarios establecidos cada 3 horas aproximadamente
+2. Evitar bebidas oscuras y estimulantes como café, te, gaseosas, bebidas energizantes, pues pueden provocar alteración en el sueño y sistema nervioso.
+3. No omitir ninguna comida principal (desayuno, almuerzo y cena), teniendo en cuenta que la cena preferiblemente debe ser tomada antes de las 7 pm.
+4. Realizar actividad física mínimo 3 días a la semana 30 a 50 minutos cardiovascular (caminar, montar bicicleta, elíptica entre otros), esto ayudara a mejorar su calidad de vida junto con una alimentación balanceada de acuerdo a sus necesidades nutricionales.
+5. Evitar alimentos industrializados como caldos de cubo, salsas tipo mayonesa, salsa de tomate entre otras, sopas de sobre o de caja, encurtidos y enlatados como salchichas.
+6. Masticar despacio y con bocados pequeños hará que haya una mejor digestión y asimilación de nutrientes.`
+        );
+        await Gestion.deleteChat(msg.from.toString().replace('@c.us', ''));
+      }
+      if (msg.body === 'Recomendaciones de su Psicólogo') {
+        clientWP.sendMessage(
+          msg.from,
+          `1. Identifica si el uso del equipo de presión positiva te genera emociones o pensamientos negativos que eviten la asimilación y aceptación del tratamiento. Una vez identificados trata de aislarlos pensando en la información que tienes sobre el SAHOS y los beneficios que este tratamiento aportara para el mejoramiento de tu calidad de vida, de esta manera eliminaras pre disposiciones frente al tratamiento y facilitaras la consciencia de tu diagnóstico. Sino cuentas con información clara frente a tu diagnóstico o no lo has comprendido, solicitala en tu próxima consulta con los profesionales de Maple Respiratory.
+2. Practica ejercicios de relajación y respiración antes de acostarse, esto puede contribuir a que duermas mejor. Por ejemplo, efectuá una respiración lenta y relajada, piensa en algo que le produzca tranquilidad, inhala y exhala de forma lenta durante un par de minutos antes de usar el equipo de presión positiva.
+3. Evita los pensamientos negativos repetitivos que puedan afectar tu higiene de sueño y tu tratamiento. Si tienes preocupaciones cotidianas o tareas pendientes que no te dejan dormir, apúntalas en un cuaderno para empezar a resolverlas al día siguiente. Escribirlas te ayudará a no darle demasiadas vueltas en la cabeza cuando estas en la cama.
+4. Si te genera temor o angustia usar el equipo de presión positiva (cpap-vpap), te recomendamos que te acerques y manipules tu equipo durante las horas del día, poniéndotelo por breves periodos mientras realizas actividades como ver televisión o leer, de esa manera facilitaras que tengas una mayor asimilación de tu tratamiento a la hora de dormir.
+5. Evita quedarte despierto en la cama, si no logras conciliar el sueño. Si han pasado 30 minutos desde que se acostó y sigue aún sin dormir, levántese de la cama, vaya a otra habitación y haga algo que no lo active demasiado, como leer una revista o ver la televisión, por ejemplo. Cuando vuelva a tener sueño regrese a su dormitorio. La idea es que su cerebro asocie el dormitorio y la cama a la actividad de dormir.
+6. Trata de mantener buenas relaciones en tu hogar, ya que estar en un ambiente socio-familiar adecuado favorece la expresión de emociones positivas y tu tranquilidad a la hora de irte a dormir. Si, encuentras conflictos que no puedas manejar con tu pareja o demás familiares, debes buscar orientación profesional.`
+        );
+        await Gestion.deleteChat(msg.from.toString().replace('@c.us', ''));
+      }
+      if (msg.body === 'Recomendaciones de su Terapeuta') {
+        clientWP.sendMessage(msg.from, `*Falta por definir*`);
+        await Gestion.deleteChat(msg.from.toString().replace('@c.us', ''));
+      }
+      if (msg.body === 'Recomendaciones de su Medico Experto') {
+        clientWP.sendMessage(
+          msg.from,
+          `1. Para garantizar un sueño reparador es recomendable una habitación cómoda, oscura y silenciosa, con una temperatura agradable. No debe tener el televisor ni ningún aparato electrónico en la habitación.
+2. No debe permanecer en la cama más allá del tiempo necesario para dormir. Reducir el tiempo de permanencia en la cama mejora el sueño, evitando despertares en la noche y sensación de cansancio en la mañana.
+3. Evite consumo de café después de las 3 de la tarde, así como el consumo de bebidas energizantes, de bebidas alcohólicas y el cigarrillo, ya que afectan la calidad del sueño. 
+4. Realizar actividad física regularmente, durante al menos una hora al día con luz solar, y preferentemente en la mañana, favorece un buen dormir, un mejor control de peso y la sensación de bienestar y tranquilidad.
+5. El uso de la terapia de presión positiva debe ser todas las horas de sueño y todos los días, para lograr el beneficio de tratamiento y mejoría de los síntomas de la apnea de sueño`
+        );
+        await Gestion.deleteChat(msg.from.toString().replace('@c.us', ''));
+      }
+
+      // *** PREGUNTAS FRECUENTES
+      if (msg.body === 'PREGUNTAS FRECUENTES') {
+        clientWP.sendMessage(msg.from, `*Por favor ingrese al siguiente link:* https://maplerespiratory.co/informacion-al-usuario/preguntas-frecuentes/`);
         await Gestion.deleteChat(msg.from.toString().replace('@c.us', ''));
       }
     }
