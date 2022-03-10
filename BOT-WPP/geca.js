@@ -78,15 +78,87 @@ clientWP.on('message', async (msg) => {
 
       // si se insertó el mensaje de saludo respondo
       if (comprobar == true) {
-        const MensajeActualAsesor = `Hola, bienvenido al Chat Respira de Maple Respiratory, para gestionar de forma oportuna su requerimiento por favor tener a la mano lapiz, papel y la documentacion necesaria. Si tiene alguna duda en cuanto a las políticas de funcionamiento del chat ingrese al siguiente link:https://www.maplerespiratory.co/de-su-interes/normatividad/.
-      Horario de atencion es de Lunes a Viernes de 7am a 7 pm y los sabados de 7am a 1pm
-      ¿Con quién tengo el gusto de hablar? (Por favor escriba su nombre) ⬇️`;
-        clientWP.sendMessage(msg.from, MensajeActualAsesor);
+        //   const MensajeActualAsesor = `Hola, bienvenido al Chat Respira de Maple Respiratory, para gestionar de forma oportuna su requerimiento por favor tener a la mano lapiz, papel y la documentacion necesaria. Si tiene alguna duda en cuanto a las políticas de funcionamiento del chat ingrese al siguiente link:https://www.maplerespiratory.co/de-su-interes/normatividad/.
+        // Horario de atencion es de Lunes a Viernes de 7am a 7 pm y los sabados de 7am a 1pm
+        // ¿Con quién tengo el gusto de hablar? (Por favor escriba su nombre) ⬇️`;
+
+        const options = [
+          { title: 'INFORMACIÓN DE CONTACTO' },
+          { title: 'RECOMENDACIONES GENERALES' },
+          { title: 'TIPOS Y PREPARACIONES PARA EXÁMENES' },
+          { title: 'DEBERES Y DERECHOS' },
+          { title: 'MANEJO DE MASCARAS Y EQUIPO' },
+          { title: 'RECOMENDACIONES DEL EQUIPO DE SALUD' },
+          { title: 'PREGUNTAS FRECUENTES' },
+          { title: 'PASO A AGENTE' },
+        ];
+        const menu = [{ title: 'Bienvenido al ChatBot de Maple Respiratory. Este es el menú principal:', rows: options }];
+        const lista = new List('Bienvenido al ChatBot de Maple Respiratory. Este es el menú principal:', 'Seleccione una opción', menu);
+        clientWP.sendMessage(msg.from, lista);
       }
     }
 
+    // ? VALIDAR RESPONIO LA LISTA MSG_SALUDO
+    else if (resultadosss[0].GES_CULT_MSGBOT == 'MSG_SALUDO' && msg.type !== 'list_response') {
+      clientWP.sendMessage(msg.from, 'Por Favor selecciona una opcion de la lista');
+    }
+
     // ! CUANDO RESPONDE CON EL NOMBRE Y DEVUELVE EL PARENTEZCO
-    else if (resultadosss[0].GES_CULT_MSGBOT == 'MSG_SALUDO' && msg.type === 'chat') {
+    else if (resultadosss[0].GES_CULT_MSGBOT == 'MSG_SALUDO' && msg.type === 'list_response' && msg.body === 'PASO A AGENTE') {
+      let idArbol = await Gestion.select_id_arbol_by_number(numero_chat);
+      console.log('LLEGA EL ARBOL ', idArbol, resultadosss[0].PKGES_CODIGO);
+      let updateByName = await Gestion.update_gestion(idArbol, 'MSG_TIPMENU', msg.body, 'GES_CDETALLE1');
+
+      clientWP.sendMessage(msg.from, '¿Cual es su nombre?');
+    }
+    // !***! CUANDO NO ES 'PASO A AGENTE'
+    else if ((resultadosss[0].GES_CULT_MSGBOT == 'MSG_SALUDO' || resultadosss[0].GES_CULT_MSGBOT == 'MSG_TIPMENUINFO') && msg.type === 'list_response' && msg.body !== 'PASO A AGENTE') {
+      let idArbol = await Gestion.select_id_arbol_by_number(numero_chat);
+      console.log('LLEGA EL ARBOL ', idArbol, resultadosss[0].PKGES_CODIGO);
+      let updateByName = await Gestion.update_gestion(idArbol, 'MSG_TIPMENUINFO', msg.body, 'GES_CDETALLE1');
+      // *** INFORMACIÓN DE CONTACTO
+      if (msg.body === 'INFORMACIÓN DE CONTACTO') {
+        clientWP.sendMessage(
+          msg.from,
+          `*Líneas de Atención:*
+  Bogotá: 4863232
+  Línea Celular: 3208899553
+  Nacional: 01 800 0186660
+  @: servicioalcliente@maplerespiratory.co
+  www.maplerespiratory.co
+
+*Sedes*
+  Medellín Laureles: Calle 33ª N° 76 - 29
+  Ibagué Cádiz: Carrera 4D N° 36 - 24
+  Cali Tequendama: Cra 40 N° 5B - 29 
+  Sogamoso: Cra 9a N° 14 - 133
+  Manizales Belen: Calle 58 # 23 - 52
+  Bogotá Castellana: Cra 46 N° 95 - 35
+  HORARIO DE ATENCIÓN: 7AM - 7PM`
+        );
+        await Gestion.deleteChat(msg.from.toString().replace('@c.us', ''));
+      }
+      // *** RECOMENDACIONES GENERALES
+      if (msg.body === 'RECOMENDACIONES GENERALES') {
+        const options = [{ title: 'Citas generales' }, { title: 'Entrega de equipo' }, { title: 'Entrega de resultados de Diagnostico' }, { title: 'Copagos y cuotas moderadoras' }];
+        const menu = [{ title: 'Por favor seleccione una opción de esta lista', rows: options }];
+        const lista = new List('Por favor seleccione una opción de esta lista', 'Seleccione una opción', menu);
+        clientWP.sendMessage(msg.from, lista);
+      }
+      if (msg.body === 'Citas generales') {
+        clientWP.sendMessage(
+          msg.from,
+          `- Traer cédula original
+- Puede asistir a la cita con un acompañante.
+- Llevar la tarjeta del equipo o el equipo completo si presenta fallas
+- Debe presentarse 15 minutos antes de la cita asignada.
+- Recuerde que su hora de llegada debe ser puntual de lo contrario perderá su cita y se le presenta algún inconveniente antes de la cita o no puede asistir por favor comuníquese al: Bogotá: 4863232, Móvil: 3208899553 Nacional: 018000 186660`
+        );
+        await Gestion.deleteChat(msg.from.toString().replace('@c.us', ''));
+      }
+    }
+    // ! VALIDA SI LLEGA EL NOMBRE
+    else if (resultadosss[0].GES_CULT_MSGBOT == 'MSG_TIPMENU' && msg.type === 'chat') {
       let idArbol = await Gestion.select_id_arbol_by_number(numero_chat);
       console.log('LLEGA EL ARBOL ', idArbol, resultadosss[0].PKGES_CODIGO);
       let updateByName = await Gestion.update_gestion(idArbol, 'MSG_NOMBRE', msg.body, 'GES_CDETALLE1');
@@ -94,7 +166,7 @@ clientWP.on('message', async (msg) => {
       const options = [{ title: 'Paciente' }, { title: 'Familiar' }, { title: 'Conocido' }, { title: 'Asegurador(funcionario)' }];
       const menu = [{ title: 'Por favor seleccione una opción de esta lista', rows: options }];
       const lista = new List('¿Que parentesco tiene con el paciente?', 'Seleccione una opción', menu);
-      clientWP.sendMessage(msg.from, lista).then(() => {});
+      clientWP.sendMessage(msg.from, lista);
     }
 
     // ! VALIDA SI LLEGA EL TIPO DE PACIENTE Y RETORNA LISTA DE TIPO DE DOCUMENTO
@@ -347,7 +419,7 @@ async function eliminarExesoChats() {
 const envioMasivo = async () => {
   const mensajeMasivo = async () => {
     try {
-      let chatPorEnviar = await Outbound.porEnviar(); 
+      let chatPorEnviar = await Outbound.porEnviar();
       // * Validar si hay un mensaje Outbound por enviar
       if (chatPorEnviar) {
         // * Enviar Mensaje Outbound
