@@ -33,4 +33,32 @@ document.addEventListener('DOMContentLoaded', () => {
     },
     false
   );
+
+  const cuerpoMsgInput = document.querySelector('#cuerpoMsg');
+  const titleAndValue = document.querySelectorAll('.columnExcel');
+  let columnasInExcel = {}
+  titleAndValue.forEach((el) => {
+    console.log(el.dataset.title);
+    columnasInExcel[el.dataset.title] = el.dataset.titlevalue;
+  });
+  cuerpoMsgInput.addEventListener('keyup', () => {
+    let cuerpoMsg = cuerpoMsgInput.value;
+
+    let arr = cuerpoMsg.split('('),
+      columnasInMsg = [];
+    arr.forEach((el) => {
+      if (el.includes(')')) {
+        let nColumn = el.split(')')[0];
+        columnasInMsg.push(nColumn);
+      }
+    });
+
+    let newMsg = cuerpoMsg
+    columnasInMsg.forEach((el) => {
+      newMsg = newMsg.replace(`(${el})`, columnasInExcel[el])
+    });
+    
+    const preview = document.querySelector('#preview');
+    preview.textContent = newMsg;
+  });
 });

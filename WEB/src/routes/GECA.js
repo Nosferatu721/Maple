@@ -274,7 +274,19 @@ router.post('/cargarExcel', (req, res) => {
 
             let titleColumns = [];
             for (let i = 2; i <= columnsExcel; i++) {
-              titleColumns.push(selectedHoja1.getRow(1).getCell(i).toString());
+              let title = selectedHoja1.getRow(1).getCell(i).toString(),
+                titleValue = selectedHoja1.getRow(2).getCell(i).toString();
+              if (titleValue.includes('GMT')) {
+                // * SI es Fecha
+                if (titleValue.split(' ')[4].split(':')[0] === '00') {
+                  let fechaAll = new Date(Date.now()),
+                  titleValue = fechaAll.toJSON().slice(0, 10);
+                } else {
+                  // * SI es Hora
+                  titleValue = new Date(titleValue).toUTCString().split(' ')[4].split(':').slice(0, 2).join(':')
+                }
+              }
+              titleColumns.push({ title, titleValue });
             }
             let numerosExcel = [];
             for (let i = 2; i <= rowsExcel; i++) {
@@ -334,7 +346,7 @@ router.post('/envioMasivo', (req, res) => {
               cuerpoMsgNew = cuerpoMsgNew.replace(`(${el})`, fecha);
             } else {
               // * SI es Hora
-              cuerpoMsgNew = cuerpoMsgNew.replace(`(${el})`, valor.split(' ')[4]);
+              cuerpoMsgNew = cuerpoMsgNew.replace(`(${el})`, new Date(valor).toUTCString().split(' ')[4].split(':').slice(0, 2).join(':'));
             }
           } else {
             cuerpoMsgNew = cuerpoMsgNew.replace(`(${el})`, valor);
