@@ -184,6 +184,18 @@ class Gestion {
 
     return position;
   }
+
+  async deleteChat(numero) {
+    let estado = 'Activo';
+    const sql = `DELETE FROM ${DB}.tbl_gestion WHERE GES_NUMERO_COMUNICA ='${numero}' AND GES_CESTADO = '${estado}';`;
+    await connDB
+      .promise()
+      .query(sql)
+      .then(([results, fields]) => {
+        return true
+      })
+      .catch((Error) => ControlErrores(Error));
+  }
 }
 
 class Mensaje {

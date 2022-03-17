@@ -11,7 +11,7 @@
         <div class='content'>
           <ul>
             {{#each titleColumns}}
-              <li class='columnExcel'><i class='bx bx-plus-circle'></i> {{this}}</li>
+              <li class='columnExcel' data-title="{{this.title}}" data-titlevalue="{{this.titleValue}}"><i class='bx bx-plus-circle'></i> {{this.title}}</li>
             {{/each}}
           </ul>
         </div>
@@ -40,8 +40,14 @@
               <label for='cuerpoMsg'>Estructura del mensaje</label>
             </div>
           </div>
-          <button id='btnEnviarMsgs' class='waves-effect waves-light btn black lighten-1 amber-text text-darken-1' type='submit'><i class='bx bxs-send'></i> Cargar</button>
+          <button id='btnEnviarMsgs' class='waves-effect waves-light btn black lighten-1 amber-text text-darken-1' type='submit'><i class='bx bxs-send'></i> Enviar</button>
         </form>
+      </div>
+      <div class="row">
+        <div class="col s12">
+          <h4 class="center">Vista Previa</h4>
+          <div id="preview" class="preview"></div>
+        </div>
       </div>
     </div>
   </div>
