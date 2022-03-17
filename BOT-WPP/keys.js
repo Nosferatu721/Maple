@@ -12,17 +12,17 @@ const DB = 'dbp_whatsappmapple';
 // const DB=Class2.DeCrypt('416D486D41775A6D5A6D566D41515A6A5A6D4C6D42515A6C5A6D743145774C30417756335A514954416D703242514C6B416D44335A6D4C6B416D4E335A514C6C41784C3D')
 
 module.exports = {
-  // database: {
-  //   host : ip,
-  //   user : userServer,
-  //   password : pass,
-  //   database : DB
-  // },
   database: {
-    host: '127.0.0.1',
-    user: 'root',
-    password: '',
-    database: 'dbp_whatsappmapple',
+    host : ip,
+    user : userServer,
+    password : pass,
+    database : DB
   },
+  // database: {
+  //   host: '127.0.0.1',
+  //   user: 'root',
+  //   password: '',
+  //   database: 'dbp_whatsappmapple',
+  // },
 };
 console.log('credenciales', ip, userServer, pass, DB);
