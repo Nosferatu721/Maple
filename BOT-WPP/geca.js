@@ -82,9 +82,9 @@ clientWP.on('message', async (msg) => {
         // Horario de atencion es de Lunes a Viernes de 7am a 7 pm y los sabados de 7am a 1pm
         // ¿Con quién tengo el gusto de hablar? (Por favor escriba su nombre) ⬇️`;
 
-        const options = [{ title: 'INFORMACIÓN DE CONTACTO' }, { title: 'RECOMENDACIONES GENERALES' }, { title: 'TIPOS Y PREPARACIONES PARA EXÁMENES' }, { title: 'DEBERES Y DERECHOS' }, { title: 'MANEJO DE MASCARAS Y EQUIPO' }, { title: 'RECOMENDACIONES DEL EQUIPO DE SALUD' }, { title: 'PREGUNTAS FRECUENTES' }, { title: 'PASO A AGENTE' }];
-        const menu = [{ title: 'Bienvenido al ChatBot de Maple Respiratory. Este es el menú principal:', rows: options }];
-        const lista = new List('Bienvenido al ChatBot de Maple Respiratory. Este es el menú principal:', 'Seleccione una opción', menu);
+        const options = [{ title: 'INFORMACIÓN DE CONTACTO' }, { title: 'INFORMACIÓN DE SEDES' }, { title: 'RECOMENDACIONES GENERALES' }, { title: 'TIPOS Y PREPARACIONES PARA EXÁMENES' }, { title: 'DEBERES Y DERECHOS' }, { title: 'PASO A AGENTE' }];
+        const menu = [{ title: 'Opciones:', rows: options }];
+        const lista = new List('Bienvenido al ChatBot de Maple Respiratory. Este es el menú principal: ', 'Seleccione una opción', menu);
         clientWP.sendMessage(msg.from, lista);
       }
     }
@@ -116,9 +116,15 @@ clientWP.on('message', async (msg) => {
   Línea Celular: 3208899553
   Nacional: 01 800 0186660
   @: servicioalcliente@maplerespiratory.co
-  www.maplerespiratory.co
+  www.maplerespiratory.co`);
+        await Gestion.deleteChat(msg.from.toString().replace('@c.us', ''));
+      }
 
-*Sedes*
+      // *** INFORMACIÓN DE SEDES
+      if (msg.body === 'INFORMACIÓN DE SEDES') {
+        clientWP.sendMessage(
+          msg.from,
+          `*Sedes*
   Medellín Laureles: Calle 33ª N° 76 - 29
   Ibagué Cádiz: Carrera 4D N° 36 - 24
   Cali Tequendama: Cra 40 N° 5B - 29 
@@ -362,7 +368,11 @@ Si usted es definido en la consulta de valoración inicial por medicina como apt
       console.log('LLEGA EL ARBOL ', idArbol, resultadosss[0].PKGES_CODIGO);
       let updateByName = await Gestion.update_gestion(idArbol, 'MSG_TIPODOCUMENTO', msg.body, 'GES_CDETALLE3');
 
-      clientWP.sendMessage(msg.from, 'Me confirma nombre del paciente');
+      if (resultadosss[0].GES_CDETALLE2 === 'Paciente') {
+        clientWP.sendMessage(msg.from, 'Me confirma dos numeros de contacto con el paciente \n Por ejemplo: 3216549870 - 9876541');
+      } else {
+        clientWP.sendMessage(msg.from, 'Me confirma nombre del paciente');
+      }
     }
     // ? VALIDAR RESPONIO LA LISTA MSG_TIPODOCUMENTO
     else if (resultadosss[0].GES_CULT_MSGBOT == 'MSG_TIPOPACIENTE' && msg.type !== 'list_response') {
@@ -370,12 +380,23 @@ Si usted es definido en la consulta de valoración inicial por medicina como apt
     }
 
     // ! VALIDA SI LLEGA CONFIRMACION NOMBRE PACIENTE Y RETORNA CONFIRMACION DE NUMEROS DEL PACIENTE
-    else if (resultadosss[0].GES_CULT_MSGBOT == 'MSG_TIPODOCUMENTO' && msg.type === 'chat') {
+    else if (resultadosss[0].GES_CULT_MSGBOT == 'MSG_TIPODOCUMENTO' && msg.type === 'chat' && resultadosss[0].GES_CDETALLE2 !== 'Paciente') {
       let idArbol = await Gestion.select_id_arbol_by_number(numero_chat);
       console.log('LLEGA EL ARBOL ', idArbol, resultadosss[0].PKGES_CODIGO);
       let updateByName = await Gestion.update_gestion(idArbol, 'MSG_CONFIRNOMBRE', msg.body, 'GES_CDETALLE4');
 
       clientWP.sendMessage(msg.from, 'Me confirma dos numeros de contacto con el paciente \n Por ejemplo: 3216549870 - 9876541');
+    }
+    // ! 
+    else if (resultadosss[0].GES_CULT_MSGBOT == 'MSG_TIPODOCUMENTO' && msg.type === 'chat' && resultadosss[0].GES_CDETALLE2 === 'Paciente') {
+      let idArbol = await Gestion.select_id_arbol_by_number(numero_chat);
+      console.log('LLEGA EL ARBOL ', idArbol, resultadosss[0].PKGES_CODIGO);
+      let updateByName = await Gestion.update_gestion(idArbol, 'MSG_CONFIRNUMEROS', msg.body, 'GES_CDETALLE5');
+
+      const options = [{ title: 'Si' }, { title: 'No' }];
+      const menu = [{ title: 'Por favor seleccione una opción de esta lista', rows: options }];
+      const lista = new List('¿Ha tenido contacto con alguien covid positivo en los ultimos 14 días o ha tenido contacto estrecho?', 'Seleccione una opción', menu);
+      clientWP.sendMessage(msg.from, lista).then(() => {});
     }
 
     // ! VALIDA SI LLEGA CONFIRMACION NUMEROS PACIENTE Y RETORNA CONTACTO COVID ¿?
@@ -396,7 +417,7 @@ Si usted es definido en la consulta de valoración inicial por medicina como apt
       console.log('LLEGA EL ARBOL ', idArbol, resultadosss[0].PKGES_CODIGO);
       let updateByName = await Gestion.update_gestion(idArbol, 'MSG_CONTACTCOVID', msg.body, 'GES_CDETALLE6');
 
-      const options = [{ title: 'Fiebre' }, { title: 'Congestion Nasal' }, { title: 'Dolor de Cabeza' }, { title: 'Dificultad al respirar' }, { title: 'Dolor de garganta' }, { title: 'Perdida del gusto' }, { title: 'Perdida del olfato' }];
+      const options = [{ title: 'Fiebre' }, { title: 'Congestion Nasal' }, { title: 'Dolor de Cabeza' }, { title: 'Dificultad al respirar' }, { title: 'Dolor de garganta' }, { title: 'Perdida del gusto' }, { title: 'Perdida del olfato' }, {title: 'Nunguna'}];
       const menu = [{ title: 'Por favor seleccione una opción de esta lista', rows: options }];
       const lista = new List('¿Ha tenido en los ultimos 14 dias alguno de los siguientes sintomas?', 'Seleccione una opción', menu);
       clientWP.sendMessage(msg.from, lista).then(() => {});
@@ -433,7 +454,10 @@ Si usted es definido en la consulta de valoración inicial por medicina como apt
       console.log('LLEGA EL ARBOL ', idArbol, resultadosss[0].PKGES_CODIGO);
       let updateByName = await Gestion.update_gestion(idArbol, 'MSG_EPS', msg.body, 'GES_CDETALLE9');
 
-      clientWP.sendMessage(msg.from, 'Indique a que sede lo estan remitiendo');
+      const options = [{ title: '*Medellín Laureles*: Calle 33ª N° 76 - 29' }, { title: '*Ibagué Cádiz*: Carrera 4D N° 36 - 24' }, { title: '*Cali Tequendama*: Cra 40 N° 5B - 29' }, { title: '*Sogamoso*: Cra 9a N° 14 - 133' }, { title: '*Manizales Belen*: Calle 58 # 23 - 52' }, { title: '*Bogotá Castellana*: Cra 46 N° 95 - 35' }, { title: 'Otro' }];
+      const menu = [{ title: 'Opciones: ', rows: options }];
+      const lista = new List('Indique a que sede lo estan remitiendo', 'Seleccione una opción', menu);
+      clientWP.sendMessage(msg.from, lista).then(() => {});
     }
     // ? VALIDAR RESPONIO LA LISTA MSG_EPS
     else if (resultadosss[0].GES_CULT_MSGBOT == 'MSG_CIUDAD' && msg.type !== 'list_response') {
@@ -441,7 +465,7 @@ Si usted es definido en la consulta de valoración inicial por medicina como apt
     }
 
     // ! VALIDA SI LLEGA SEDE Y RETORNA CUAL ES SU SOLICITUD ¿?
-    else if (resultadosss[0].GES_CULT_MSGBOT == 'MSG_EPS' && msg.type === 'chat') {
+    else if (resultadosss[0].GES_CULT_MSGBOT == 'MSG_EPS' && msg.type === 'list_response') {
       let idArbol = await Gestion.select_id_arbol_by_number(numero_chat);
       console.log('LLEGA EL ARBOL ', idArbol, resultadosss[0].PKGES_CODIGO);
       let updateByName = await Gestion.update_gestion(idArbol, 'MSG_SEDE', msg.body, 'GES_CDETALLE10');

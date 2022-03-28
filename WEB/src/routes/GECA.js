@@ -277,10 +277,11 @@ router.post('/cargarExcel', (req, res) => {
               let title = selectedHoja1.getRow(1).getCell(i).toString(),
                 titleValue = selectedHoja1.getRow(2).getCell(i).toString();
               if (titleValue.includes('GMT')) {
+                let fecha = new Date(`${titleValue}`).toISOString()
                 // * SI es Fecha
-                if (titleValue.split(' ')[4].split(':')[0] === '00') {
-                  let fechaAll = new Date(Date.now()),
-                  titleValue = fechaAll.toJSON().slice(0, 10);
+                if (fecha.split('T')[1].split(':')[1] === '00') {
+                  titleValue = fecha.split('T')[0].split('-').join('/')
+                  console.log(titleValue);
                 } else {
                   // * SI es Hora
                   titleValue = new Date(titleValue).toUTCString().split(' ')[4].split(':').slice(0, 2).join(':')
@@ -340,10 +341,12 @@ router.post('/envioMasivo', (req, res) => {
           // * Validar si es Fecha o Hora
           if (valor.includes('GMT')) {
             // * SI es Fecha
-            if (valor.split(' ')[4].split(':')[0] === '00') {
-              let fechaAll = new Date(Date.now()),
-                fecha = fechaAll.toJSON().slice(0, 10);
-              cuerpoMsgNew = cuerpoMsgNew.replace(`(${el})`, fecha);
+            let fecha = new Date(`${valor}`).toISOString()
+            // * SI es Fecha
+            if (fecha.split('T')[1].split(':')[1] === '00') {
+              titleValue = fecha.split('T')[0].split('-').join('/')
+              console.log(titleValue);
+              cuerpoMsgNew = cuerpoMsgNew.replace(`(${el})`, titleValue);
             } else {
               // * SI es Hora
               cuerpoMsgNew = cuerpoMsgNew.replace(`(${el})`, new Date(valor).toUTCString().split(' ')[4].split(':').slice(0, 2).join(':'));
