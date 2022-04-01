@@ -105,7 +105,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   setTimeout(() => {
     ocultarLoader();
-  }, 2000);
+  }, 5000);
 
   //SIEMPRE QUE ENTRE EL USUARIO VA A ESTAR ACTVIO PERO PRIMERO DEBE VALIDAR SI TIENE UN ESTADO ANTERIOR
   //SI ES NULO SIGNIFICA QUE NO SE LE HA ASIGNADO NADA Y LO PONE COMO EN ESTADO ACTIVO
@@ -130,6 +130,7 @@ document.addEventListener('DOMContentLoaded', () => {
   //CONSTA DE DOS PARTES, UN SELECT QUE ELIGE UN CAMPO QUE CUMPLA CON LOS REQUISITOS Y UN UPDATE
   //QUE ACTUALIZA LOS CAMPOS
   const ChatsAsignados = () => {
+    console.log('Asignando');
     //REALIZA UNA CONSULTA PARA VERIFICAR CON ESE NUMERO LOS MENSAJES RECIBDIDOS
     postData('/GECA/chatsAsignados', { PKPER_NCODIGO: idPer }).then(async (res) => {
       localStorage.setItem('cantidad', res.contador);
@@ -225,16 +226,16 @@ document.addEventListener('DOMContentLoaded', () => {
               let mensajeBienvenida = 'Tiene un nuevo cliente en este chat';
               // console.log('************************ESTE ES EL MENSAJE', mensaje);
               idArbol = idArboll;
-              let msjConcatenadoo = mensajeBienvenida + '<br>' + '<b>Este es un chat Outbound</b><br>';
+              let msjConcatenadoo = mensajeBienvenida + '<br>' + '<b>Este es un chat Outbound</b> - Cargue: ' + res.outbound.OUT_CDETALLE1 +'<br>';
               msjConcatenadoo = msjConcatenadoo + '<b>Mensaje Masivo Enviado:</b><br><i>' + res.outbound.OUT_CULT_MSGBOT + '</i>';
 
               asignacion(idPer, idArbol);
               //    console.log('##################este es el', numberRecepcion);
 
-              localStorage.setItem('number1', numberRecepcion);
-              localStorage.setItem('Msj1', msjConcatenadoo);
-              localStorage.setItem('arbol1', idArboll);
-              Toast.fire({ icon: 'info', title: 'Tiene un nuevo usuario en el chat 1' });
+              localStorage.setItem('number2', numberRecepcion);
+              localStorage.setItem('Msj2', msjConcatenadoo);
+              localStorage.setItem('arbol2', idArboll);
+              Toast.fire({ icon: 'info', title: 'Tiene un nuevo usuario en el chat 2' });
             } else {
               res.result.forEach((mensaje) => {
                 infoChatBotInit =
@@ -299,16 +300,16 @@ document.addEventListener('DOMContentLoaded', () => {
               let mensajeBienvenida = 'Tiene un nuevo cliente en este chat';
               // console.log('************************ESTE ES EL MENSAJE', mensaje);
               idArbol = idArboll;
-              let msjConcatenadoo = mensajeBienvenida + '<br>' + '<b>Este es un chat Outbound</b><br>';
+              let msjConcatenadoo = mensajeBienvenida + '<br>' + '<b>Este es un chat Outbound</b> - Cargue: ' + res.outbound.OUT_CDETALLE1 +'<br>';
               msjConcatenadoo = msjConcatenadoo + '<b>Mensaje Masivo Enviado:</b><br><i>' + res.outbound.OUT_CULT_MSGBOT + '</i>';
 
               asignacion(idPer, idArbol);
               //    console.log('##################este es el', numberRecepcion);
 
-              localStorage.setItem('number1', numberRecepcion);
-              localStorage.setItem('Msj1', msjConcatenadoo);
-              localStorage.setItem('arbol1', idArboll);
-              Toast.fire({ icon: 'info', title: 'Tiene un nuevo usuario en el chat 1' });
+              localStorage.setItem('number3', numberRecepcion);
+              localStorage.setItem('Msj3', msjConcatenadoo);
+              localStorage.setItem('arbol3', idArboll);
+              Toast.fire({ icon: 'info', title: 'Tiene un nuevo usuario en el chat 3' });
             } else {
               res.result.forEach((mensaje) => {
                 infoChatBotInit =
@@ -377,7 +378,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // ! Repeat
     setTimeout(() => {
       ChatsAsignados();
-    }, 1000);
+    }, 5000);
   };
   ChatsAsignados();
   //ESTA FUNCION RECIBE EL ID DEL USUARIO Y EL ID DEL ARBOL, AQUI SE HACE LA ASIGNACION OSEA EL UPDATE
@@ -394,6 +395,7 @@ document.addEventListener('DOMContentLoaded', () => {
   let chat1Init2 = 'chat_2';
   let chat1Init3 = 'chat_3';
   setInterval(function cambio_ids() {
+    console.log('Interval');
     //ACA PINTO LOS NUMEROS Y SUS ID
     //OBTENGO LAS VARIABLES DEL LOCAL STORAGE
     number1 = localStorage.getItem('number1');
@@ -402,7 +404,7 @@ document.addEventListener('DOMContentLoaded', () => {
     //console.log('EL COMPILADO DE NUMEROS ES ', number1, number2, number3);
     // AQUI CAMBIO LOS ID DE LOS GRID PERO COMO SE CAMBIAN AL EJECUTARSE POR PRIMERA VEZ ESTA FUNC
     //LO QUE HACE ENTONCES ES ES VERIFICAR CUANDO CAMBIO Y ASIGNAR DE NUEVO EL ID CUANDO HAYA CAMBIADO
-    console.log(chat1Init, number1);
+    // console.log(chat1Init, number1);
     if (chat1Init != number1) {
       document.getElementById(chat1Init).id = number1;
       chat1Init = number1;
@@ -437,7 +439,7 @@ document.addEventListener('DOMContentLoaded', () => {
     //document.getElementById('chat_3').id = number3;
 
     //numero1.innerHTML=number1;
-  }, 2000);
+  }, 5000);
 
   ///ESTAS 3 FUNCIONES SON LAS ENCARGADAS DE REALIZAR LA TOMA INICIAL DEL TAMAÑO DEL ARREGLO
   //TOMA EL TAMAÑO DE UN ARREGLO QUE CONSULTA LOS MENSAJES UNICAMENTE "RECIBIDOS"
@@ -583,7 +585,9 @@ document.addEventListener('DOMContentLoaded', () => {
       refreshMessagesChat1();
     }, 2000);
   };
-  refreshMessagesChat1();
+  setTimeout(() => {
+    refreshMessagesChat1();
+  }, 5000);
 
   //CHAT2
 
@@ -658,7 +662,9 @@ document.addEventListener('DOMContentLoaded', () => {
       refreshMessagesChat2();
     }, 2000);
   };
-  refreshMessagesChat2();
+  setTimeout(() => {
+    refreshMessagesChat2();
+  }, 5000);
 
   //CHAT3
 
@@ -732,7 +738,9 @@ document.addEventListener('DOMContentLoaded', () => {
       refreshMessagesChat3();
     }, 2000);
   };
-  refreshMessagesChat3();
+  setTimeout(() => {
+    refreshMessagesChat3();
+  }, 5000);
   ///OCULTA BOTONES.
   setInterval(function hidebutton() {
     //console.log("ESTOY CON EL ESTADO",localStorage.getItem('estadoUser'),"y con la cantidad",localStorage.getItem('cantidad'));
