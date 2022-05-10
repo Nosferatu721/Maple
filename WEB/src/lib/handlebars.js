@@ -13,5 +13,5 @@ Handlebars.registerHelper('isEnviado', (value) => {
 });
 
 Handlebars.registerHelper('isOutbound', (value) => {
-  return value === null || value === 0;
+  return value != 0;
 });

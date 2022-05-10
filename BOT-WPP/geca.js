@@ -1,7 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 const qrcode = require('qrcode-terminal');
-const { Client, Buttons, List, MessageMedia } = require('whatsapp-web.js');
+const { Client, Buttons, List, MessageMedia, LocalAuth } = require('whatsapp-web.js');
 const db_DML = require('./DB_DML');
 const mysql = require('mysql2');
 //const { database } = require('./keys');
@@ -27,6 +27,7 @@ const clientWP = new Client({
   },
   authTimeoutMs: 3600000,
   clientId: 'sesion_mibot',
+  authStrategy: new LocalAuth({ clientId: 'cliente-one' }),
 });
 
 clientWP.initialize();
