@@ -381,4 +381,16 @@ router.post('/envioMasivo', (req, res) => {
     .catch((error) => console.log(error));
 });
 
+//**revisa si tiene los  mismos casos asignados o si ya se lo quitaron para limpiar la parte visual */
+router.post('/reviewVars', async (req, res) => {
+  const { FKGES_NPER_CODIGO,PKGES_CODIGO, GES_NUMERO_COMUNICA } = req.body;
+  console.log('recibo el numero', GES_NUMERO_COMUNICA,'y el id',PKGES_CODIGO);
+  const sqlConsulta = `SELECT * FROM ${keys.database.database}.tbl_gestion WHERE  GES_ESTADO_CASO='ABIERTO' AND GES_NUMERO_COMUNICA=? AND PKGES_CODIGO =? AND FKGES_NPER_CODIGO =?; `;
+  let [rows] = await db.promise().query(sqlConsulta, [GES_NUMERO_COMUNICA,PKGES_CODIGO,FKGES_NPER_CODIGO])
+  console.log(sqlConsulta);
+  console.log(rows);
+
+  res.json(rows);
+});
+
 module.exports = router;

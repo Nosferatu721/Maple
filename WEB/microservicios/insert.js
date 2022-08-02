@@ -7,7 +7,7 @@ const mysql = require('mysql2');
 const cors = require('cors');
 const config = require('./config');
 //const router = require('express').Router();
-const PORT = 5001;
+const PORT = 5031;
 
 const DB = database.database;
 //*settings */

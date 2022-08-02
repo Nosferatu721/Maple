@@ -124,6 +124,19 @@ class Gestion {
     return comprobar;
   }
 
+  // ! Sin Responder el arbol
+  async getNoResolvedCases() {
+    const sql = `SELECT * FROM ${DB}.tbl_gestion WHERE GES_CULT_MSGBOT != 'MSG_FIN' AND GES_CESTADO = 'Activo';`;
+    let [result] = await connDB.promise().query(sql)
+    return result;
+  }
+  // ! update_gestion_No_Answered
+  async update_gestion_No_Answered(id) {
+    const sql = `UPDATE ${DB}.tbl_gestion SET GES_CESTADO = 'Inactivo' WHERE PKGES_CODIGO = ${id}`;
+    let [result] = await connDB.promise().query(sql)
+    return result;
+  }
+
   //retornar los 3 datos que necesito para el arbol estado, estado del mensaje e id del asesor asignado, solo retornar esta
   //data pero de los arboles activos
   async get_data_list_from_number(numberPhone) {

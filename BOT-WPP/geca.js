@@ -692,3 +692,17 @@ function dumpError(err) {
     return 'dumpError :: El arcumento no es de tipo Objeto.';
   }
 }
+setInterval(async function closeCaseswithoutTerms() {
+  var fecha = new Date();
+  var hora_actual = fecha.getHours();
+
+  let chatsConBot = await Gestion.getNoResolvedCases();
+  // console.log(chatsConBot.length);
+  chatsConBot.forEach(async (chat) => {
+    let ultimaHoraChat = parseInt(new Date(chat.GES_CFECHA_MODIFICACION).toLocaleString().split(' ')[1].split(':')[0]);
+    if (hora_actual - ultimaHoraChat >= 4) {
+      console.log(chatsConBot.length, 'Se cierra el chat por inactividad');
+      await Gestion.update_gestion_No_Answered(chat.PKGES_CODIGO);
+    }
+  });
+}, 600000);
