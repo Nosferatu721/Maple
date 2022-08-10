@@ -1,0 +1,27 @@
+<div class='cont_backoffice' style="padding: 1rem 2rem">
+  <h1 class='center'>Encuestas</h1>
+  <table id="tabla" class="striped highlight centered">
+    <thead class="styleHeadTable">
+      <tr>
+        <th>Asesor</th>
+        <th>Numero de Chat</th>
+        <th>¿Se resolvio solicitud?</th>
+        <th>Recomendarias el WhatsApp de Mapple</th>
+        <th>Opinion</th>
+        <th>Fecha</th>
+      </tr>
+    </thead>
+    <tbody>
+      {{#each encuestas}}
+        <tr>
+          <td>{{this.PER_CUSUARIO}}</td>
+          <td>{{this.GES_NUMERO_COMUNICA}}</td>
+          <td>{{this.GES_CDETALLE14}}</td>
+          <td>{{this.GES_CDETALLE15}}</td>
+          <td>{{this.GES_CDETALLE16}}</td>
+          <td>{{this.GES_CFECHA_MODIFICACION}}</td>
+        </tr>
+      {{/each}}
+    </tbody>
+  </table>
+</div>

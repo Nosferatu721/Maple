@@ -100,8 +100,8 @@ class Gestion {
   //este probablemente no lo necesite ya que cambia a MSG_FIN despues de responder la lista
   async update_gestion(id, msg, respuesta, column) {
     let comprobar = false;
-    let estado = 'Activo';
-    const sql = `UPDATE ${DB}.tbl_gestion SET GES_CULT_MSGBOT = '${msg}', GES_CDETALLE = '${respuesta}', ${column} = '${respuesta}' WHERE PKGES_CODIGO = '${id}' AND GES_CESTADO = '${estado}';`;
+    // let estado = 'Activo';
+    const sql = `UPDATE ${DB}.tbl_gestion SET GES_CULT_MSGBOT = '${msg}', GES_CDETALLE = '${respuesta}', ${column} = '${respuesta}' WHERE PKGES_CODIGO = '${id}'`;
     await connDB
       .promise()
       .query(sql)
@@ -124,16 +124,29 @@ class Gestion {
     return comprobar;
   }
 
+  async cerrarChat(id) {
+    let comprobar = false;
+    const sql = `UPDATE ${DB}.tbl_gestion SET GES_CULT_MSGBOT = 'MSG_CLOSE', GES_CESTADO = 'Inactivo' WHERE PKGES_CODIGO = '${id}' AND GES_CESTADO = 'Activo'`;
+    console.log(sql);
+    await connDB
+      .promise()
+      .query(sql)
+      .then(() => {
+        comprobar = true;
+      });
+    return comprobar;
+  }
+
   // ! Sin Responder el arbol
   async getNoResolvedCases() {
     const sql = `SELECT * FROM ${DB}.tbl_gestion WHERE GES_CULT_MSGBOT != 'MSG_FIN' AND GES_CESTADO = 'Activo';`;
-    let [result] = await connDB.promise().query(sql)
+    let [result] = await connDB.promise().query(sql);
     return result;
   }
   // ! update_gestion_No_Answered
   async update_gestion_No_Answered(id) {
     const sql = `UPDATE ${DB}.tbl_gestion SET GES_CESTADO = 'Inactivo' WHERE PKGES_CODIGO = ${id}`;
-    let [result] = await connDB.promise().query(sql)
+    let [result] = await connDB.promise().query(sql);
     return result;
   }
 
@@ -156,6 +169,18 @@ class Gestion {
       .catch((Error) => ControlErrores(Error));
     return datatable;
   }
+  // Buscar Conversaciones Cerradas para realizar encuesta desde el Bot
+  async getChatCerrado(numberPhone) {
+    const sql = `SELECT * FROM ${DB}.tbl_gestion WHERE GES_NUMERO_COMUNICA ='${numberPhone}' AND GES_CENCUESTA = 'ENCUESTAR' AND GES_ESTADO_CASO = 'CERRADO' AND GES_CESTADO = 'Inactivo'`;
+    let [result] = await connDB.promise().query(sql);
+    return result.length ? result[0] : false;
+  }
+
+  async getChatsCerrado() {
+    const sql = `SELECT * FROM ${DB}.tbl_gestion WHERE GES_ESTADO_CASO = 'CERRADO' AND GES_CESTADO = 'Inactivo' AND GES_CENCUESTA = 'ENCUESTAR'`;
+    let [result] = await connDB.promise().query(sql);
+    return result.length ? result[0] : false;
+  }
 
   //funcion encargada de responder al cliente si se encuentra en cola para que no se vaya, para ello debe consultar con el numero
   //de cel cual es su id en la base de datos.
@@ -163,6 +188,27 @@ class Gestion {
     let estado = 'Activo';
     let id_tree;
     const sql = `SELECT PKGES_CODIGO FROM ${DB}.tbl_gestion WHERE GES_NUMERO_COMUNICA ='${numberPhone}' AND GES_CESTADO = '${estado}';`;
+    //console.log(sql);
+    await connDB
+      .promise()
+      .query(sql)
+      .then(([results, fields]) => {
+        if (results.length > 0) {
+          id_tree = results[0].PKGES_CODIGO;
+        } else {
+          id_tree = 'NO EXISTE ARBOL CON ESE NUMERO ACTIVO';
+        }
+      })
+      .catch((Error) => ControlErrores(Error));
+
+    return id_tree;
+  }
+  //funcion encargada de responder al cliente si se encuentra en cola para que no se vaya, para ello debe consultar con el numero
+  //de cel cual es su id en la base de datos.
+  async select_id_arbol_by_numberCerrado(numberPhone) {
+    let estado = 'Activo';
+    let id_tree;
+    const sql = `SELECT PKGES_CODIGO FROM ${DB}.tbl_gestion WHERE GES_NUMERO_COMUNICA ='${numberPhone}' AND GES_ESTADO_CASO = 'CERRADO' AND GES_CENCUESTA = 'ENCUESTAR' AND GES_CESTADO = 'Inactivo'`;
     //console.log(sql);
     await connDB
       .promise()
@@ -205,7 +251,7 @@ class Gestion {
       .promise()
       .query(sql)
       .then(([results, fields]) => {
-        return true
+        return true;
       })
       .catch((Error) => ControlErrores(Error));
   }
@@ -275,6 +321,53 @@ class Mensaje {
   }
 }
 
+class QR {
+  async existQRDB() {
+    let vtt = false;
+    const sqlSelectQR = `SELECT * FROM tbl_restandar WHERE EST_CCONSULTA = 'cmbQR'`;
+    let [resultQR] = await connDB.promise().query(sqlSelectQR);
+    if (resultQR.length === 0) {
+      return vtt;
+    } else {
+      vtt = true;
+      return vtt;
+    }
+  }
+  async insertQR(qr) {
+    let vtt = false,
+      data = {
+        EST_CCONSULTA: 'cmbQR',
+        EST_CDETALLE: qr,
+        EST_CDETALLE1: 'Por Sincronizar',
+      };
+    const sqlInsertQR = `INSERT INTO tbl_restandar SET ?`;
+    let [resultInsertQR] = await connDB.promise().query(sqlInsertQR, data);
+    return resultInsertQR;
+  }
+  async updateQR(qr) {
+    let vtt = false,
+      data = {
+        EST_CCONSULTA: 'cmbQR',
+        EST_CDETALLE: qr,
+        EST_CDETALLE1: 'Por Sincronizar',
+      };
+    const sqlUpdateQR = `UPDATE tbl_restandar SET ? WHERE EST_CCONSULTA = 'cmbQR'`;
+    let [resultUpdateQR] = await connDB.promise().query(sqlUpdateQR, data);
+    return resultUpdateQR;
+  }
+  async updateQR2() {
+    let vtt = false,
+      data = {
+        EST_CCONSULTA: 'cmbQR',
+        EST_CDETALLE1: 'Sincronizado',
+      };
+    const sqlUpdateQR = `UPDATE tbl_restandar SET ? WHERE EST_CCONSULTA = 'cmbQR'`;
+    let [resultUpdateQR] = await connDB.promise().query(sqlUpdateQR, data);
+    console.log('Sincronizado');
+    return resultUpdateQR;
+  }
+}
+
 function GetFechaActual() {
   Mes = new Date().getMonth() + 1;
   if (Mes >= 1 && Mes < 10) {
@@ -337,4 +430,4 @@ class Outbound {
   }
 }
 
-module.exports = { Gestion, Mensaje, Outbound };
+module.exports = { Gestion, Mensaje, Outbound, QR };

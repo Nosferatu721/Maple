@@ -142,14 +142,14 @@ document.addEventListener('DOMContentLoaded', () => {
   const ChatsAsignados = () => {
     console.log('Asignando');
     //REALIZA UNA CONSULTA PARA VERIFICAR CON ESE NUMERO LOS MENSAJES RECIBDIDOS
-    postData('http://172.70.7.70:5032/chatsAsignados', { PKPER_NCODIGO: idPer }).then(async (res) => {
+    postData('http://localhost:5032/chatsAsignados', { PKPER_NCODIGO: idPer }).then(async (res) => {
       localStorage.setItem('cantidad', res.contador);
       let cantidad = localStorage.getItem('cantidad');
       if (res.contador < 3 && localStorage.getItem('estadoUser') === 'ACTIVO') {
         // console.log('ESTOY ENTRANDO AL IFFFFFFFFFFFFFFFFFFF');
         if (localStorage.getItem('number1') === null) {
           // console.log('@@@@@@@@@ENTRO ASIGNO AL CHAT1');
-          postData('http://172.70.7.70:5032/asignacionSelect').then(async (res) => {
+          postData('http://localhost:5032/asignacionSelect').then(async (res) => {
             if (res.result.length === 0) return;
             if (res.result[0].GES_CMSGOUTBOUND === 'Si') {
               console.log(res);
@@ -172,38 +172,35 @@ document.addEventListener('DOMContentLoaded', () => {
             } else {
               res.result.forEach(async (mensaje) => {
                 infoChatBotInit =
-                  `
-                Nombre: ${mensaje.GES_CDETALLE1} ` +
+                `
+                <b>Nombre:</b> ${mensaje.GES_CDETALLE3} ` +
                   '<br>' +
                   `
-                Parentesco: ${mensaje.GES_CDETALLE2} ` +
+                <b>Parentesco:</b> ${mensaje.GES_CDETALLE4} ` +
                   '<br>' +
                   `
-                Tipo Documento: ${mensaje.GES_CDETALLE3} ` +
+                <b>Tipo Documento:</b> ${mensaje.GES_CDETALLE5} ` +
                   '<br>' +
                   `
-                Nombre Confirmado: ${mensaje.GES_CDETALLE4} ` +
+                <b>N° Documento:</b> ${mensaje.GES_CDETALLE6} ` +
                   '<br>' +
                   `
-                Numeros de Contacto: ${mensaje.GES_CDETALLE5} ` +
+                <b>Numeros de Contacto:</b> ${mensaje.GES_CDETALLE7} ` +
                   '<br>' +
                   `
-                ¿Contacto con alguien con Covid? (Ultimos 14 dias): ${mensaje.GES_CDETALLE6} ` +
+                <b>Ciudad:</b> ${mensaje.GES_CDETALLE8} ` +
                   '<br>' +
                   `
-                ¿Ha tenido alguno de los siguientes sintomas? (Ultimos 14 dias): ${mensaje.GES_CDETALLE7} ` +
+                <b>EPS:</b> ${mensaje.GES_CDETALLE9} ` +
                   '<br>' +
                   `
-                Ciudad: ${mensaje.GES_CDETALLE8} ` +
+                <b>Sede:</b> ${mensaje.GES_CDETALLE10} ` +
                   '<br>' +
                   `
-                EPS: ${mensaje.GES_CDETALLE9} ` +
+                <b>Solicitud Principal Cliente:</b> ${mensaje.GES_CDETALLE11} ` +
                   '<br>' +
                   `
-                Sede: ${mensaje.GES_CDETALLE10} ` +
-                  '<br>' +
-                  `
-                Solicitud Cliente: ${mensaje.GES_CDETALLE11} ` +
+                <b>Solicitud Secundaria Cliente:</b> ${mensaje.GES_CDETALLE12} ` +
                   '<br>' +
                   `
               `;
@@ -228,7 +225,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
           //        numberRecepcion=0;
         } else if (localStorage.getItem('number2') === null) {
-          postData('http://172.70.7.70:5032/asignacionSelect').then(async (res) => {
+          postData('http://localhost:5032/asignacionSelect').then(async (res) => {
             if (res.result.length === 0) return;
             if (res.result[0].GES_CMSGOUTBOUND === 'Si') {
               let idArboll = res.result[0].PKGES_CODIGO;
@@ -250,38 +247,35 @@ document.addEventListener('DOMContentLoaded', () => {
             } else {
               res.result.forEach((mensaje) => {
                 infoChatBotInit =
-                  `
-                Nombre: ${mensaje.GES_CDETALLE1} ` +
+                `
+                <b>Nombre:</b> ${mensaje.GES_CDETALLE3} ` +
                   '<br>' +
                   `
-                Parentesco: ${mensaje.GES_CDETALLE2} ` +
+                <b>Parentesco:</b> ${mensaje.GES_CDETALLE4} ` +
                   '<br>' +
                   `
-                Tipo Documento: ${mensaje.GES_CDETALLE3} ` +
+                <b>Tipo Documento:</b> ${mensaje.GES_CDETALLE5} ` +
                   '<br>' +
                   `
-                Nombre Confirmado: ${mensaje.GES_CDETALLE4} ` +
+                <b>N° Documento:</b> ${mensaje.GES_CDETALLE6} ` +
                   '<br>' +
                   `
-                Numeros de Contacto: ${mensaje.GES_CDETALLE5} ` +
+                <b>Numeros de Contacto:</b> ${mensaje.GES_CDETALLE7} ` +
                   '<br>' +
                   `
-                ¿Contacto con alguien con Covid? (Ultimos 14 dias): ${mensaje.GES_CDETALLE6} ` +
+                <b>Ciudad:</b> ${mensaje.GES_CDETALLE8} ` +
                   '<br>' +
                   `
-                ¿Ha tenido alguno de los siguientes sintomas? (Ultimos 14 dias): ${mensaje.GES_CDETALLE7} ` +
+                <b>EPS:</b> ${mensaje.GES_CDETALLE9} ` +
                   '<br>' +
                   `
-                Ciudad: ${mensaje.GES_CDETALLE8} ` +
+                <b>Sede:</b> ${mensaje.GES_CDETALLE10} ` +
                   '<br>' +
                   `
-                EPS: ${mensaje.GES_CDETALLE9} ` +
+                <b>Solicitud Principal Cliente:</b> ${mensaje.GES_CDETALLE11} ` +
                   '<br>' +
                   `
-                Sede: ${mensaje.GES_CDETALLE10} ` +
-                  '<br>' +
-                  `
-                Solicitud Cliente: ${mensaje.GES_CDETALLE11} ` +
+                <b>Solicitud Secuindaria Cliente:</b> ${mensaje.GES_CDETALLE12} ` +
                   '<br>' +
                   `
               `;
@@ -302,7 +296,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
           });
         } else if (localStorage.getItem('number3') === null) {
-          postData('http://172.70.7.70:5032/asignacionSelect').then(async (res) => {
+          postData('http://localhost:5032/asignacionSelect').then(async (res) => {
             if (res.result.length === 0) return;
             if (res.result[0].GES_CMSGOUTBOUND === 'Si') {
               let idArboll = res.result[0].PKGES_CODIGO;
@@ -324,38 +318,35 @@ document.addEventListener('DOMContentLoaded', () => {
             } else {
               res.result.forEach((mensaje) => {
                 infoChatBotInit =
-                  `
-                Nombre: ${mensaje.GES_CDETALLE1} ` +
+                `
+                <b>Nombre:</b> ${mensaje.GES_CDETALLE3} ` +
                   '<br>' +
                   `
-                Parentesco: ${mensaje.GES_CDETALLE2} ` +
+                <b>Parentesco:</b> ${mensaje.GES_CDETALLE4} ` +
                   '<br>' +
                   `
-                Tipo Documento: ${mensaje.GES_CDETALLE3} ` +
+                <b>Tipo Documento:</b> ${mensaje.GES_CDETALLE5} ` +
                   '<br>' +
                   `
-                Nombre Confirmado: ${mensaje.GES_CDETALLE4} ` +
+                <b>N° Documento:</b> ${mensaje.GES_CDETALLE6} ` +
                   '<br>' +
                   `
-                Numeros de Contacto: ${mensaje.GES_CDETALLE5} ` +
+                <b>Numeros de Contacto:</b> ${mensaje.GES_CDETALLE7} ` +
                   '<br>' +
                   `
-                ¿Contacto con alguien con Covid? (Ultimos 14 dias): ${mensaje.GES_CDETALLE6} ` +
+                <b>Ciudad:</b> ${mensaje.GES_CDETALLE8} ` +
                   '<br>' +
                   `
-                ¿Ha tenido alguno de los siguientes sintomas? (Ultimos 14 dias): ${mensaje.GES_CDETALLE7} ` +
+                <b>EPS:</b> ${mensaje.GES_CDETALLE9} ` +
                   '<br>' +
                   `
-                Ciudad: ${mensaje.GES_CDETALLE8} ` +
+                <b>Sede:</b> ${mensaje.GES_CDETALLE10} ` +
                   '<br>' +
                   `
-                EPS: ${mensaje.GES_CDETALLE9} ` +
+                <b>Solicitud Principal Cliente:</b> ${mensaje.GES_CDETALLE11} ` +
                   '<br>' +
                   `
-                Sede: ${mensaje.GES_CDETALLE10} ` +
-                  '<br>' +
-                  `
-                Solicitud Cliente: ${mensaje.GES_CDETALLE11} ` +
+                <b>Solicitud Secuindaria Cliente:</b> ${mensaje.GES_CDETALLE12} ` +
                   '<br>' +
                   `
               `;
@@ -394,7 +385,7 @@ document.addEventListener('DOMContentLoaded', () => {
   ChatsAsignados();
   //ESTA FUNCION RECIBE EL ID DEL USUARIO Y EL ID DEL ARBOL, AQUI SE HACE LA ASIGNACION OSEA EL UPDATE
   async function asignacion(myID, IDTree) {
-    let x = await postData('http://172.70.7.70:5032/asignacionUpdate', { PKGES_CODIGO: IDTree, FKGES_NPER_CODIGO: myID });
+    let x = await postData('http://localhost:5032/asignacionUpdate', { PKGES_CODIGO: IDTree, FKGES_NPER_CODIGO: myID });
     return x;
   }
 
@@ -458,7 +449,7 @@ document.addEventListener('DOMContentLoaded', () => {
   setTimeout(function sizeMensajesOrigenChat1() {
     //console.log('entre al tamaño de la funcion size mensaje');
     //console.log('desde el size decimos que el numero 1 es  ', number1);
-    postData('http://172.70.7.70:5033/consultaMensajesOrigen', { MEN_NUMERO_DESTINO: number1 }).then((res) => {
+    postData('http://localhost:5033/consultaMensajesOrigen', { MEN_NUMERO_DESTINO: number1 }).then((res) => {
       let lengthData = 0;
       res.result.forEach((mensaje) => {
         lengthData += 1;
@@ -468,7 +459,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }, 2000);
   setTimeout(function sizeMensajesOrigenChat2() {
-    postData('http://172.70.7.70:5033/consultaMensajesOrigen', { MEN_NUMERO_DESTINO: number2 }).then((res) => {
+    postData('http://localhost:5033/consultaMensajesOrigen', { MEN_NUMERO_DESTINO: number2 }).then((res) => {
       let lengthData = 0;
       res.result.forEach((mensaje) => {
         lengthData += 1;
@@ -478,7 +469,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }, 2000);
   setTimeout(function sizeMensajesOrigenChat3() {
-    postData('http://172.70.7.70:5033/consultaMensajesOrigen', { MEN_NUMERO_DESTINO: number3 }).then((res) => {
+    postData('http://localhost:5033/consultaMensajesOrigen', { MEN_NUMERO_DESTINO: number3 }).then((res) => {
       let lengthData = 0;
       res.result.forEach((mensaje) => {
         lengthData += 1;
@@ -512,7 +503,7 @@ document.addEventListener('DOMContentLoaded', () => {
     //FUNCION RECURRENTE QUE VA A CONSULTAR LOS MENSAJES QUE SE ESCRIBIERON
     //POSEE OTRAS FUNCIONES COMO LAS NOTIFICACIONES DE CUANDO LLEGA UN NUEVO MENSAJE
     //REALIZA UNA CONSULTA PARA VERIFICAR CON ESE NUMERO LOS MENSAJES RECIBDIDOS
-    postData('http://172.70.7.70:5033/consultaMensajesOrigen', { MEN_NUMERO_DESTINO: number1 }).then((res) => {
+    postData('http://localhost:5033/consultaMensajesOrigen', { MEN_NUMERO_DESTINO: number1 }).then((res) => {
       let lengthData = 0;
       res.result.forEach((mensaje) => {
         lengthData += 1;
@@ -551,7 +542,7 @@ document.addEventListener('DOMContentLoaded', () => {
     //SI ES RECIBIDO O ENVIADO Y LOS PINTA EN EL HTML
     //lo declaro no global para evitar que se ponga en 0 cada vez que refresco
     let arboll1 = localStorage.getItem('arbol1');
-    postData('http://172.70.7.70:5033/mensajesChat', { MEN_NUMERO_DESTINO: number1, FK_GES_CODIGO: arboll1 }).then((res) => {
+    postData('http://localhost:5033/mensajesChat', { MEN_NUMERO_DESTINO: number1, FK_GES_CODIGO: arboll1 }).then((res) => {
       chat_1.innerHTML = '';
       msjConcatenado = localStorage.getItem('Msj1');
       if (msjConcatenado != null) {
@@ -604,7 +595,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const refreshMessagesChat2 = () => {
     let chat_2 = document.getElementById(number2);
-    postData('http://172.70.7.70:5033/consultaMensajesOrigen', { MEN_NUMERO_DESTINO: number2 }).then((res) => {
+    postData('http://localhost:5033/consultaMensajesOrigen', { MEN_NUMERO_DESTINO: number2 }).then((res) => {
       let lengthData = 0;
       res.result.forEach((mensaje) => {
         lengthData += 1;
@@ -632,7 +623,7 @@ document.addEventListener('DOMContentLoaded', () => {
       document.title = 'Transferencias';
     }
     let arboll2 = localStorage.getItem('arbol2');
-    postData('http://172.70.7.70:5033/mensajesChat', { MEN_NUMERO_DESTINO: number2, FK_GES_CODIGO: arboll2 }).then((res) => {
+    postData('http://localhost:5033/mensajesChat', { MEN_NUMERO_DESTINO: number2, FK_GES_CODIGO: arboll2 }).then((res) => {
       //lenOriginalOut = obj.result.length;
       chat_2.innerHTML = '';
       msjConcatenado2 = localStorage.getItem('Msj2');
@@ -681,7 +672,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const refreshMessagesChat3 = () => {
     let chat_3 = document.getElementById(number3);
-    postData('http://172.70.7.70:5033/consultaMensajesOrigen', { MEN_NUMERO_DESTINO: number3 }).then((res) => {
+    postData('http://localhost:5033/consultaMensajesOrigen', { MEN_NUMERO_DESTINO: number3 }).then((res) => {
       let lengthData = 0;
       res.result.forEach((mensaje) => {
         lengthData += 1;
@@ -707,7 +698,7 @@ document.addEventListener('DOMContentLoaded', () => {
       document.title = 'Transferencias';
     }
     let arboll3 = localStorage.getItem('arbol3');
-    postData('http://172.70.7.70:5033/mensajesChat', { MEN_NUMERO_DESTINO: number3, FK_GES_CODIGO: arboll3 }).then((res) => {
+    postData('http://localhost:5033/mensajesChat', { MEN_NUMERO_DESTINO: number3, FK_GES_CODIGO: arboll3 }).then((res) => {
       //lenOriginalOut = obj.result.length;
       chat_3.innerHTML = '';
       msjConcatenado3 = localStorage.getItem('Msj3');
@@ -941,9 +932,9 @@ document.addEventListener('DOMContentLoaded', () => {
     console.log(selectTipChat1.value, selectEspChat1.value);
     //M.toast({html: 'I am a toast!'})
     console.log('************ME LLEGA************* ', arbol1);
-    const mensajeFin = 'Gracias por comunicarse con Maple Respiratory Colombia, lo esperamos en una próxima oportunidad, que tenga un feliz dia.';
+    const mensajeFin = 'Gracias por comunicarte con Maple Respiratory Colombia. Para nosotros es muy importante conocer tu opinión sobre el servicio recibido en ésta conversación, por lo que te agradecemos responder éstas 3 preguntas. ¡Que tengas un buen día!';
 
-    postData('http://172.70.7.70:5031/enviarMensaje', { MEN_NUMERO_DESTINO: number1, MEN_TEXTO: mensajeFin, FK_GES_CODIGO: arbol1 }).then((res) => {
+    postData('http://localhost:5031/enviarMensaje', { MEN_NUMERO_DESTINO: number1, MEN_TEXTO: mensajeFin, FK_GES_CODIGO: arbol1 }).then((res) => {
       console.log(res);
     });
 
@@ -969,9 +960,9 @@ document.addEventListener('DOMContentLoaded', () => {
       Toast.fire({ icon: 'warning', title: 'Por favor Selecciona la Tipificacion' });
       return;
     }
-    const mensajeFin = 'Gracias por contactarnos nos estaremos viendo en proximas ocasiones';
+    const mensajeFin = 'Gracias por comunicarte con Maple Respiratory Colombia. Para nosotros es muy importante conocer tu opinión sobre el servicio recibido en ésta conversación, por lo que te agradecemos responder éstas 3 preguntas. ¡Que tengas un buen día!';
 
-    postData('http://172.70.7.70:5031/enviarMensaje', { MEN_NUMERO_DESTINO: number2, MEN_TEXTO: mensajeFin, FK_GES_CODIGO: arbol2 }).then((res) => {
+    postData('http://localhost:5031/enviarMensaje', { MEN_NUMERO_DESTINO: number2, MEN_TEXTO: mensajeFin, FK_GES_CODIGO: arbol2 }).then((res) => {
       console.log(res);
     });
 
@@ -993,9 +984,9 @@ document.addEventListener('DOMContentLoaded', () => {
       Toast.fire({ icon: 'warning', title: 'Por favor Selecciona la Tipificacion' });
       return;
     }
-    const mensajeFin = 'Gracias por contactarnos nos estaremos viendo en proximas ocasiones';
+    const mensajeFin = 'Gracias por comunicarte con Maple Respiratory Colombia. Para nosotros es muy importante conocer tu opinión sobre el servicio recibido en ésta conversación, por lo que te agradecemos responder éstas 3 preguntas. ¡Que tengas un buen día!';
 
-    postData('http://172.70.7.70:5031/enviarMensaje', { MEN_NUMERO_DESTINO: number3, MEN_TEXTO: mensajeFin, FK_GES_CODIGO: arbol3 }).then((res) => {
+    postData('http://localhost:5031/enviarMensaje', { MEN_NUMERO_DESTINO: number3, MEN_TEXTO: mensajeFin, FK_GES_CODIGO: arbol3 }).then((res) => {
       console.log(res);
     });
 
@@ -1191,7 +1182,7 @@ document.addEventListener('DOMContentLoaded', () => {
       console.log('ENTRÓ UNO VACIO');
     } else {
       let arboll1 = localStorage.getItem('arbol1');
-      postData('http://172.70.7.70:5031/enviarMensaje', { MEN_NUMERO_DESTINO: numero, MEN_TEXTO: mensaje, FK_GES_CODIGO: arboll1 }).then((res) => {
+      postData('http://localhost:5031/enviarMensaje', { MEN_NUMERO_DESTINO: numero, MEN_TEXTO: mensaje, FK_GES_CODIGO: arboll1 }).then((res) => {
         console.log(res);
       });
       inputMensaje1.value = '';
@@ -1208,7 +1199,7 @@ document.addEventListener('DOMContentLoaded', () => {
     } else {
       let arboll2 = localStorage.getItem('arbol2');
       console.log('OBTENGO ', numero, mensaje);
-      postData('http://172.70.7.70:5031/enviarMensaje', { MEN_NUMERO_DESTINO: numero, MEN_TEXTO: mensaje, FK_GES_CODIGO: arboll2 }).then((res) => {
+      postData('http://localhost:5031/enviarMensaje', { MEN_NUMERO_DESTINO: numero, MEN_TEXTO: mensaje, FK_GES_CODIGO: arboll2 }).then((res) => {
         console.log(res);
       });
       console.log('HICE UNA PÉTICIÓN JEJE');
@@ -1227,7 +1218,7 @@ document.addEventListener('DOMContentLoaded', () => {
       Toast.fire({ icon: 'info', title: 'Ingrese Mensaje' });
     } else {
       let arboll3 = localStorage.getItem('arbol3');
-      postData('http://172.70.7.70:5031/enviarMensaje', { MEN_NUMERO_DESTINO: numero, MEN_TEXTO: mensaje, FK_GES_CODIGO: arboll3 }).then((res) => {
+      postData('http://localhost:5031/enviarMensaje', { MEN_NUMERO_DESTINO: numero, MEN_TEXTO: mensaje, FK_GES_CODIGO: arboll3 }).then((res) => {
         console.log(res);
       });
       console.log('HICE UNA PÉTICIÓN JEJE');

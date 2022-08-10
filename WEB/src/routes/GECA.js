@@ -176,7 +176,7 @@ router.post('/casoCerrado', (req, res) => {
   const { PKGES_CODIGO, selectTipChat1, selectEspChat1 } = req.body;
   console.log('*******************--------recibo de id y de estado-----------------****************', PKGES_CODIGO);
 
-  const sqlUpdate = `UPDATE ${keys.database.database}.tbl_gestion SET GES_ESTADO_CASO = ?, GES_CDETALLE17 = ?, GES_CDETALLE18 = ?, GES_CESTADO = ? WHERE PKGES_CODIGO = ?`;
+  const sqlUpdate = `UPDATE ${keys.database.database}.tbl_gestion SET GES_ESTADO_CASO = ?, GES_CENCUESTA = 'ENCUESTAR', GES_CDETALLE17 = ?, GES_CDETALLE18 = ?, GES_CESTADO = ? WHERE PKGES_CODIGO = ?`;
   db.promise()
     .query(sqlUpdate, ['CERRADO', selectTipChat1, selectEspChat1, 'Inactivo', PKGES_CODIGO])
     .then(([result, fields]) => {
@@ -277,14 +277,14 @@ router.post('/cargarExcel', (req, res) => {
               let title = selectedHoja1.getRow(1).getCell(i).toString(),
                 titleValue = selectedHoja1.getRow(2).getCell(i).toString();
               if (titleValue.includes('GMT')) {
-                let fecha = new Date(`${titleValue}`).toISOString()
+                let fecha = new Date(`${titleValue}`).toISOString();
                 // * SI es Fecha
                 if (fecha.split('T')[1].split(':')[1] === '00') {
-                  titleValue = fecha.split('T')[0].split('-').join('/')
+                  titleValue = fecha.split('T')[0].split('-').join('/');
                   console.log(titleValue);
                 } else {
                   // * SI es Hora
-                  titleValue = new Date(titleValue).toUTCString().split(' ')[4].split(':').slice(0, 2).join(':')
+                  titleValue = new Date(titleValue).toUTCString().split(' ')[4].split(':').slice(0, 2).join(':');
                 }
               }
               titleColumns.push({ title, titleValue });
@@ -341,10 +341,10 @@ router.post('/envioMasivo', (req, res) => {
           // * Validar si es Fecha o Hora
           if (valor.includes('GMT')) {
             // * SI es Fecha
-            let fecha = new Date(`${valor}`).toISOString()
+            let fecha = new Date(`${valor}`).toISOString();
             // * SI es Fecha
             if (fecha.split('T')[1].split(':')[1] === '00') {
-              titleValue = fecha.split('T')[0].split('-').join('/')
+              titleValue = fecha.split('T')[0].split('-').join('/');
               console.log(titleValue);
               cuerpoMsgNew = cuerpoMsgNew.replace(`(${el})`, titleValue);
             } else {
@@ -383,14 +383,35 @@ router.post('/envioMasivo', (req, res) => {
 
 //**revisa si tiene los  mismos casos asignados o si ya se lo quitaron para limpiar la parte visual */
 router.post('/reviewVars', async (req, res) => {
-  const { FKGES_NPER_CODIGO,PKGES_CODIGO, GES_NUMERO_COMUNICA } = req.body;
-  console.log('recibo el numero', GES_NUMERO_COMUNICA,'y el id',PKGES_CODIGO);
+  const { FKGES_NPER_CODIGO, PKGES_CODIGO, GES_NUMERO_COMUNICA } = req.body;
+  console.log('recibo el numero', GES_NUMERO_COMUNICA, 'y el id', PKGES_CODIGO);
   const sqlConsulta = `SELECT * FROM ${keys.database.database}.tbl_gestion WHERE  GES_ESTADO_CASO='ABIERTO' AND GES_NUMERO_COMUNICA=? AND PKGES_CODIGO =? AND FKGES_NPER_CODIGO =?; `;
-  let [rows] = await db.promise().query(sqlConsulta, [GES_NUMERO_COMUNICA,PKGES_CODIGO,FKGES_NPER_CODIGO])
+  let [rows] = await db.promise().query(sqlConsulta, [GES_NUMERO_COMUNICA, PKGES_CODIGO, FKGES_NPER_CODIGO]);
   console.log(sqlConsulta);
   console.log(rows);
 
   res.json(rows);
+});
+
+// * Reportes Encuestas
+router.get('/encuestas', async (req, res) => {
+  const sql = `SELECT * FROM tbl_gestion INNER JOIN tbl_rpermiso ON tbl_gestion.FKGES_NPER_CODIGO = tbl_rpermiso.PKPER_NCODIGO WHERE GES_CENCUESTA = 'ENCUESTADO'`;
+  let [result] = await db.promise().query(sql);
+  res.render('GECA/encuestas', { title: 'Encuestas', encuestas: result });
+});
+
+// * QR Vista
+router.get('/viewQR', async (req, res) => {
+  res.render('GECA/viewQR', { title: 'QR' });
+});
+router.get('/getQR', async (req, res) => {
+  const sqlSelectQR = `SELECT * FROM tbl_restandar WHERE EST_CCONSULTA = 'cmbQR' AND EST_CDETALLE1 = 'Por Sincronizar'`;
+  let [result] = await db.promise().query(sqlSelectQR);
+  if (result.length === 0) {
+    res.json({ result: true });
+  } else {
+    res.json({ result: result[0] });
+  }
 });
 
 module.exports = router;
