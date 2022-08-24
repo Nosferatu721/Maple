@@ -405,7 +405,7 @@ router.get('/viewQR', async (req, res) => {
   res.render('GECA/viewQR', { title: 'QR' });
 });
 router.get('/getQR', async (req, res) => {
-  const sqlSelectQR = `SELECT * FROM tbl_restandar WHERE EST_CCONSULTA = 'cmbQR' AND EST_CDETALLE1 = 'Por Sincronizar'`;
+  const sqlSelectQR = `SELECT * FROM TBL_RESTANDAR WHERE EST_CCONSULTA = 'cmbQR' AND EST_CDETALLE1 = 'Por Sincronizar'`;
   let [result] = await db.promise().query(sqlSelectQR);
   if (result.length === 0) {
     res.json({ result: true });

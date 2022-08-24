@@ -177,7 +177,7 @@ class Gestion {
   }
 
   async getChatsCerrado() {
-    const sql = `SELECT * FROM ${DB}.tbl_gestion WHERE GES_ESTADO_CASO = 'CERRADO' AND GES_CESTADO = 'Inactivo' AND GES_CENCUESTA = 'ENCUESTAR'`;
+    const sql = `SELECT * FROM ${DB}.tbl_gestion WHERE GES_CULT_MSGBOT = 'MSG_FIN' AND GES_ESTADO_CASO = 'CERRADO' AND GES_CESTADO = 'Inactivo' AND GES_CENCUESTA = 'ENCUESTAR'`;
     let [result] = await connDB.promise().query(sql);
     return result.length ? result[0] : false;
   }
@@ -324,7 +324,7 @@ class Mensaje {
 class QR {
   async existQRDB() {
     let vtt = false;
-    const sqlSelectQR = `SELECT * FROM tbl_restandar WHERE EST_CCONSULTA = 'cmbQR'`;
+    const sqlSelectQR = `SELECT * FROM TBL_RESTANDAR WHERE EST_CCONSULTA = 'cmbQR'`;
     let [resultQR] = await connDB.promise().query(sqlSelectQR);
     if (resultQR.length === 0) {
       return vtt;
@@ -340,7 +340,7 @@ class QR {
         EST_CDETALLE: qr,
         EST_CDETALLE1: 'Por Sincronizar',
       };
-    const sqlInsertQR = `INSERT INTO tbl_restandar SET ?`;
+    const sqlInsertQR = `INSERT INTO TBL_RESTANDAR SET ?`;
     let [resultInsertQR] = await connDB.promise().query(sqlInsertQR, data);
     return resultInsertQR;
   }
@@ -351,7 +351,7 @@ class QR {
         EST_CDETALLE: qr,
         EST_CDETALLE1: 'Por Sincronizar',
       };
-    const sqlUpdateQR = `UPDATE tbl_restandar SET ? WHERE EST_CCONSULTA = 'cmbQR'`;
+    const sqlUpdateQR = `UPDATE TBL_RESTANDAR SET ? WHERE EST_CCONSULTA = 'cmbQR'`;
     let [resultUpdateQR] = await connDB.promise().query(sqlUpdateQR, data);
     return resultUpdateQR;
   }
@@ -361,7 +361,7 @@ class QR {
         EST_CCONSULTA: 'cmbQR',
         EST_CDETALLE1: 'Sincronizado',
       };
-    const sqlUpdateQR = `UPDATE tbl_restandar SET ? WHERE EST_CCONSULTA = 'cmbQR'`;
+    const sqlUpdateQR = `UPDATE TBL_RESTANDAR SET ? WHERE EST_CCONSULTA = 'cmbQR'`;
     let [resultUpdateQR] = await connDB.promise().query(sqlUpdateQR, data);
     console.log('Sincronizado');
     return resultUpdateQR;
